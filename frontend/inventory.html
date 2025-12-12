@@ -1,0 +1,159 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Inventario - HealthTrack Systems</title>
+    <link rel="stylesheet" href="css/styles.css">
+</head>
+<body>
+    <div class="app-container">
+        <!-- Sidebar -->
+        <aside class="sidebar">
+            <div class="sidebar-header">
+                <img src="img/healthtrack-logo.png" alt="HealthTrack" style="width: 180px; height: auto;">
+            </div>
+            
+            <nav class="sidebar-nav">
+                <a href="dashboard.html" class="nav-item">
+                    <span class="icon">📊</span>
+                    <span>Dashboard</span>
+                </a>
+                <a href="pos.html" class="nav-item">
+                    <span class="icon">💰</span>
+                    <span>Punto de Venta</span>
+                </a>
+                <a href="inventory.html" class="nav-item active">
+                    <span class="icon">📦</span>
+                    <span>Inventario</span>
+                </a>
+                <a href="patients.html" class="nav-item">
+                    <span class="icon">👥</span>
+                    <span>Pacientes</span>
+                </a>
+                    <a href="doctors.html" class="nav-item">
+                    <span class="nav-icon">👨‍⚕️</span>
+                    <span class="nav-text">Doctores</span>
+                </a>
+                <a href="invoices.html" class="nav-item">
+                    <span class="nav-icon">🧾</span>
+                    <span class="nav-text">Facturas</span>
+                </a>
+                <a href="users.html" class="nav-item" id="usersNavItem" style="display: none;">
+                    <span class="icon">👤</span>
+                    <span>Usuarios</span>
+                </a>
+            </nav>
+            
+            <div class="sidebar-footer">
+                <div class="user-info">
+                    <div class="user-avatar" id="userAvatar">U</div>
+                    <div class="user-details">
+                        <div class="user-name" id="userName">Usuario</div>
+                        <div class="user-role" id="userRole">Rol</div>
+                    </div>
+                </div>
+                <button class="btn btn-danger btn-block btn-sm" id="logoutBtn">
+                    Cerrar Sesión
+                </button>
+            </div>
+        </aside>
+        
+        <!-- Main Content -->
+        <main class="main-content">
+            <div class="top-bar">
+                <h1 class="page-title">📦 Gestión de Inventario</h1>
+                <div class="top-bar-actions">
+                    <button class="btn btn-success" id="addProductBtn" onclick="showAddProductModal()">
+                        ➕ Nuevo Producto
+                    </button>
+                    <button class="btn btn-primary" id="refreshBtn">
+                        🔄 Actualizar
+                    </button>
+                </div>
+            </div>
+            
+            <div class="content">
+                <!-- Filters -->
+                <div class="card">
+                    <div class="inventory-filters">
+                        <div class="filter-group">
+                            <label>Filtrar por Almacén</label>
+                            <select id="warehouseFilter" class="form-control">
+                                <option value="">Todos los almacenes</option>
+                            </select>
+                        </div>
+                        
+                        <div class="filter-group">
+                            <label>Buscar Producto</label>
+                            <input type="text" 
+                                   id="productFilter" 
+                                   class="form-control" 
+                                   placeholder="Nombre del producto...">
+                        </div>
+                        
+                        <div class="filter-group">
+                            <label>Estado de Stock</label>
+                            <select id="stockStatusFilter" class="form-control">
+                                <option value="">Todos</option>
+                                <option value="CRITICAL">🔴 Crítico</option>
+                                <option value="LOW">🟡 Bajo</option>
+                                <option value="NORMAL">🟢 Normal</option>
+                                <option value="OVERSTOCK">🔵 Exceso</option>
+                            </select>
+                        </div>
+                        
+                        <div class="filter-group" style="display: flex; align-items: flex-end;">
+                            <label style="display: block; width: 100%;">
+                                <input type="checkbox" id="lowStockOnly" style="margin-right: 5px;">
+                                Solo stock bajo
+                            </label>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- Inventory Statistics -->
+                <div class="stats-grid" style="grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));">
+                    <div class="stat-card">
+                        <div class="stat-details">
+                            <h3 id="totalProducts">0</h3>
+                            <p>Productos Totales</p>
+                        </div>
+                    </div>
+                    <div class="stat-card">
+                        <div class="stat-details">
+                            <h3 id="totalValue">$0.00</h3>
+                            <p>Valor Total</p>
+                        </div>
+                    </div>
+                    <div class="stat-card">
+                        <div class="stat-details">
+                            <h3 id="criticalItems">0</h3>
+                            <p>Items Críticos</p>
+                        </div>
+                    </div>
+                    <div class="stat-card">
+                        <div class="stat-details">
+                            <h3 id="lowStockItems">0</h3>
+                            <p>Stock Bajo</p>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- Inventory Table -->
+                <div class="card">
+                    <div class="card-header">
+                        <h3 class="card-title">Inventario Detallado</h3>
+                    </div>
+                    <div id="inventoryTable">
+                        <div class="spinner"></div>
+                    </div>
+                </div>
+            </div>
+        </main>
+    </div>
+    
+    <script src="js/utils.js"></script>
+    <script src="js/inventory.js"></script>
+</body>
+</html>

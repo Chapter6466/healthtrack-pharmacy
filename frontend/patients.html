@@ -1,0 +1,143 @@
+<!--Frontend / healthtrack-pharmacy / patients.html-->
+
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Pacientes - HealthTrack Systems</title>
+    <link rel="stylesheet" href="css/styles.css">
+</head>
+<body>
+    <div class="app-container">
+        <!-- Sidebar -->
+        <aside class="sidebar">
+            <div class="sidebar-header">
+                <img src="img/healthtrack-logo.png" alt="HealthTrack" style="width: 180px; height: auto;">
+            </div>
+            
+            <nav class="sidebar-nav">
+                <a href="dashboard.html" class="nav-item">
+                    <span class="icon">📊</span>
+                    <span>Dashboard</span>
+                </a>
+                <a href="pos.html" class="nav-item">
+                    <span class="icon">💰</span>
+                    <span>Punto de Venta</span>
+                </a>
+                <a href="inventory.html" class="nav-item">
+                    <span class="icon">📦</span>
+                    <span>Inventario</span>
+                </a>
+                <a href="patients.html" class="nav-item active">
+                    <span class="icon">👥</span>
+                    <span>Pacientes</span>
+                </a>
+                    <a href="doctors.html" class="nav-item">
+                    <span class="nav-icon">👨‍⚕️</span>
+                    <span class="nav-text">Doctores</span>
+                </a>
+                <a href="invoices.html" class="nav-item">
+                    <span class="nav-icon">🧾</span>
+                    <span class="nav-text">Facturas</span>
+                </a>
+                <a href="users.html" class="nav-item" id="usersNavItem" style="display: none;">
+                    <span class="icon">👤</span>
+                    <span>Usuarios</span>
+                </a>
+            </nav>
+            
+            <div class="sidebar-footer">
+                <div class="user-info">
+                    <div class="user-avatar" id="userAvatar">U</div>
+                    <div class="user-details">
+                        <div class="user-name" id="userName">Usuario</div>
+                        <div class="user-role" id="userRole">Rol</div>
+                    </div>
+                </div>
+                <button class="btn btn-danger btn-block btn-sm" id="logoutBtn">
+                    Cerrar Sesión
+                </button>
+            </div>
+        </aside>
+        
+        <!-- Main Content -->
+        <main class="main-content">
+            <div class="top-bar">
+                <h1 class="page-title">👥 Gestión de Pacientes</h1>
+                
+                <!-- TABS will be added here dynamically by JavaScript -->
+                <!-- The setupTabs() function in patients.js will inject the tabs -->
+            </div>
+            
+            <div class="content">
+                <!-- Search Section (will be hidden for deactivated tab) -->
+                <div class="card" id="searchCard">
+                    <div class="card-header" style="position: relative;">
+                        <h3 class="card-title">Buscar Paciente</h3>
+                        <!-- New Patient button will be added here dynamically -->
+                    </div>
+                    <div style="padding: 20px;">
+                        <div style="display: grid; grid-template-columns: 1fr 1fr auto; gap: 15px;">
+                            <div class="form-group" style="margin-bottom: 0; position: relative;">
+                                <label>Nombre o Apellido</label>
+                                <input type="text" 
+                                       id="patientNameSearch" 
+                                       class="form-control" 
+                                       placeholder="Buscar por nombre..."
+                                       autocomplete="off">
+                                <!-- Autocomplete dropdown will be added here -->
+                            </div>
+                            
+                            <div class="form-group" style="margin-bottom: 0; position: relative;">
+                                <label>Número de Documento</label>
+                                <input type="text" 
+                                       id="patientDocSearch" 
+                                       class="form-control" 
+                                       placeholder="Buscar por documento..."
+                                       autocomplete="off">
+                                <!-- Autocomplete dropdown will be added here -->
+                            </div>
+                            
+                            <div style="display: flex; align-items: flex-end;">
+                                <button class="btn btn-primary" id="searchPatientsBtn">
+                                    🔍 Buscar
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- Results Section -->
+                <div class="card">
+                    <div class="card-header">
+                        <h3 class="card-title">Resultados</h3>
+                    </div>
+                    <div id="patientsResults">
+                        <p class="text-muted text-center" style="padding: 40px;">
+                            Cargando pacientes...
+                        </p>
+                    </div>
+                </div>
+            </div>
+        </main>
+    </div>
+    
+    <script src="js/utils.js"></script>
+    <script src="js/patients.js"></script>
+    <script>
+    // Show Users menu item only for admins
+    document.addEventListener('DOMContentLoaded', async () => {
+        const response = await fetch('/api/auth/session');
+        const data = await response.json();
+        
+        if (data.loggedIn && data.user && data.user.roleName === 'Administrator') {
+            const usersNavItem = document.getElementById('usersNavItem');
+            if (usersNavItem) {
+                usersNavItem.style.display = 'flex';
+            }
+        }
+    });
+    </script>
+</body>
+</html>

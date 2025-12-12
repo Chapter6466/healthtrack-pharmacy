@@ -1,0 +1,179 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Gestión de Doctores - HealthTrack Pharmacy</title>
+    <link rel="stylesheet" href="css/styles.css">
+</head>
+<body>
+    <div class="app-container">
+        <!-- Sidebar -->
+        <aside class="sidebar">
+            <div class="sidebar-header">
+                <img src="img/healthtrack-logo.png" alt="HealthTrack" style="width: 180px; height: auto;">
+            </div>
+            
+            <nav class="sidebar-nav">
+                <a href="dashboard.html" class="nav-item">
+                    <span class="icon">📊</span>
+                    <span>Dashboard</span>
+                </a>
+                <a href="pos.html" class="nav-item">
+                    <span class="icon">💰</span>
+                    <span>Punto de Venta</span>
+                </a>
+                <a href="inventory.html" class="nav-item">
+                    <span class="icon">📦</span>
+                    <span>Inventario</span>
+                </a>
+                <a href="patients.html" class="nav-item ">
+                    <span class="icon">👥</span>
+                    <span>Pacientes</span>
+                </a>
+                    <a href="doctors.html" class="nav-item active">
+                    <span class="nav-icon">👨‍⚕️</span>
+                    <span class="nav-text">Doctores</span>
+                </a>
+                <a href="invoices.html" class="nav-item">
+                    <span class="nav-icon">🧾</span>
+                    <span class="nav-text">Facturas</span>
+                </a>
+                <a href="users.html" class="nav-item" id="usersNavItem" style="display: none;">
+                    <span class="icon">👤</span>
+                    <span>Usuarios</span>
+                </a>
+            </nav>
+            
+            <div class="sidebar-footer">
+                <div class="user-info">
+                    <div class="user-avatar" id="userAvatar">U</div>
+                    <div class="user-details">
+                        <div class="user-name" id="userName">Usuario</div>
+                        <div class="user-role" id="userRole">Rol</div>
+                    </div>
+                </div>
+                <button id="logoutBtn" class="btn-logout">Cerrar Sesión</button>
+            </div>
+        </aside>
+
+        <!-- Main Content -->
+        <main class="main-content">
+            <div class="content-wrapper">
+                <!-- Header -->
+                <div class="page-header">
+                    <div>
+                        <h1>👨‍⚕️ Gestión de Doctores</h1>
+                        <p class="page-subtitle">Administración de prescriptores y seguros</p>
+                    </div>
+                </div>
+
+                <!-- Stats Cards -->
+                <div class="stats-container" id="statsCards">
+                    <div class="stat-card">
+                        <div class="stat-icon">👨‍⚕️</div>
+                        <div class="stat-content">
+                            <div class="stat-label">Doctores Activos</div>
+                            <div class="stat-value" id="totalDoctors">0</div>
+                        </div>
+                    </div>
+                    <div class="stat-card">
+                        <div class="stat-icon">🏥</div>
+                        <div class="stat-content">
+                            <div class="stat-label">Seguros Vinculados</div>
+                            <div class="stat-value" id="totalPartnerships">0</div>
+                        </div>
+                    </div>
+                    <div class="stat-card">
+                        <div class="stat-icon">💊</div>
+                        <div class="stat-content">
+                            <div class="stat-label">Recetas Totales</div>
+                            <div class="stat-value" id="totalPrescriptions">0</div>
+                        </div>
+                    </div>
+                    <div class="stat-card">
+                        <div class="stat-icon">💰</div>
+                        <div class="stat-content">
+                            <div class="stat-label">Descuento Promedio</div>
+                            <div class="stat-value" id="avgDiscount">0%</div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Top Bar with Search and Filters -->
+                <div class="top-bar">
+                    <div class="card" id="searchCard">
+                        <div class="card-header">
+                            <h3>Buscar Doctor</h3>
+                        </div>
+                        <div class="card-body">
+                            <div class="search-container" style="display: grid; grid-template-columns: 2fr 2fr 1fr; gap: 15px; align-items: end;">
+                                <div class="form-group" style="margin: 0;">
+                                    <label for="searchName">Nombre</label>
+                                    <input type="text" id="searchName" class="form-control" placeholder="Buscar por nombre...">
+                                </div>
+                                
+                                <div class="form-group" style="margin: 0;">
+                                    <label for="searchSpecialty">Especialidad</label>
+                                    <select id="searchSpecialty" class="form-control">
+                                        <option value="">Todas las especialidades</option>
+                                        <option value="General Medicine">Medicina General</option>
+                                        <option value="Family Medicine">Medicina Familiar</option>
+                                        <option value="Internal Medicine">Medicina Interna</option>
+                                        <option value="Cardiology">Cardiología</option>
+                                        <option value="Endocrinology">Endocrinología</option>
+                                        <option value="Pulmonology">Neumología</option>
+                                        <option value="Dermatology">Dermatología</option>
+                                        <option value="Pediatrics">Pediatría</option>
+                                        <option value="Other">Otra</option>
+                                    </select>
+                                </div>
+                                
+                                <button id="searchBtn" class="btn btn-primary" style="height: 42px;">
+                                    🔍 Buscar
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Results Section -->
+                <div class="card">
+                    <div class="card-header" style="display: flex; justify-content: space-between; align-items: center;">
+                        <h3>Resultados</h3>
+                        <button id="addDoctorBtn" class="btn btn-success">
+                            ➕ Nuevo Doctor
+                        </button>
+                    </div>
+                    <div class="card-body">
+                        <div id="doctorsResults">
+                            <p style="text-align: center; color: #666; padding: 40px;">Cargando doctores...</p>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Discount Rates Section -->
+                <div class="card">
+                    <div class="card-header" style="display: flex; justify-content: space-between; align-items: center;">
+                        <div>
+                            <h3>📊 Tarifas de Descuento por Seguro</h3>
+                            <p style="margin: 5px 0 0 0; color: #666; font-size: 14px;">Configura el porcentaje de descuento para cada seguro</p>
+                        </div>
+                    </div>
+                    <div class="card-body">
+                        <div id="discountRatesSection">
+                            <p style="text-align: center; color: #666; padding: 20px;">Cargando tarifas...</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </main>
+    </div>
+
+    <!-- Modal Container (will be populated by JavaScript) -->
+    <div id="dynamicModal" class="modal"></div>
+
+    <!-- Scripts -->
+    <script src="js/doctors.js"></script>
+</body>
+</html>

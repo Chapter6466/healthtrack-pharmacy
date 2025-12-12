@@ -1,0 +1,110 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>HealthTrack Systems - Iniciar Sesión</title>
+    <link rel="stylesheet" href="css/styles.css">
+    <style>
+        .login-page {
+            background: linear-gradient(135deg, rgba(44, 95, 141, 0.9), rgba(23, 162, 184, 0.9)),
+                        url('https://images.unsplash.com/photo-1576091160399-112ba8d25d1d?w=1920') center/cover;
+            background-attachment: fixed;
+        }
+        
+        .login-logo {
+            text-align: center;
+            margin-bottom: 30px;
+        }
+        
+        .login-logo img {
+            max-width: 280px;
+            height: auto;
+            margin-bottom: 10px;
+        }
+        
+        .login-tagline {
+            color: #2C5F8D;
+            font-size: 14px;
+            font-style: italic;
+            margin-top: 10px;
+        }
+    </style>
+</head>
+<body class="login-page">
+    <div class="login-container">
+        <div class="login-card">
+            <div class="login-logo">
+                <img src="img/healthtrack-logo.png" alt="HealthTrack Systems">
+                <p class="login-tagline">Control, precisión y bienestar.</p>
+            </div>
+            
+            <div class="login-header">
+                <h1>Sistema de Gestión Farmacéutica</h1>
+                <p>Ingrese sus credenciales para continuar</p>
+            </div>
+            
+            <form id="loginForm">
+                <div class="form-group">
+                    <label for="username">Usuario</label>
+                    <input type="text" 
+                           id="username" 
+                           class="form-control" 
+                           placeholder="Ingrese su nombre de usuario" 
+                           required 
+                           autocomplete="username">
+                </div>
+                
+                <div class="form-group">
+                    <label for="password">Contraseña</label>
+                    <input type="password" 
+                           id="password" 
+                           class="form-control" 
+                           placeholder="Ingrese su contraseña" 
+                           required
+                           autocomplete="current-password">
+                </div>
+                
+                <button type="submit" class="btn btn-primary btn-block btn-lg">
+                    Iniciar Sesión
+                </button>
+                
+                <div id="errorMsg" class="error-msg" style="display:none;"></div>
+                
+                <div id="loadingSpinner" class="spinner" style="display:none;"></div>
+            </form>
+            
+            <div class="test-credentials">
+                <p><strong>🔐 Credenciales de Prueba:</strong></p>
+                <p><strong>Farmacéutico:</strong></p>
+                <p>Usuario: <code>JD12345</code></p>
+                <p>Contraseña: <code>JOHND_HASH_12345</code></p>
+                <hr style="margin: 10px 0; border: none; border-top: 1px solid #ddd;">
+                <p><strong>Administrador:</strong></p>
+                <p>Usuario: <code>admin</code></p>
+                <p>Contraseña: <code>ADMIN_HASH_12345</code></p>
+            </div>
+        </div>
+        
+        <p style="text-align: center; color: white; margin-top: 20px; font-size: 12px;">
+            &copy; 2025 HealthTrack Systems. Todos los derechos reservados.
+        </p>
+    </div>
+    
+    <script src="js/auth.js"></script>
+    <script>
+    // Show Users menu item only for admins
+    document.addEventListener('DOMContentLoaded', async () => {
+        const response = await fetch('/api/auth/session');
+        const data = await response.json();
+        
+        if (data.loggedIn && data.user && data.user.roleName === 'Administrator') {
+            const usersNavItem = document.getElementById('usersNavItem');
+            if (usersNavItem) {
+                usersNavItem.style.display = 'flex';
+            }
+        }
+    });
+    </script>
+</body>
+</html>

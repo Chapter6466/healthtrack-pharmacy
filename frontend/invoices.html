@@ -1,0 +1,185 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Facturas - HealthTrack Pharmacy</title>
+    <link rel="stylesheet" href="css/styles.css">
+</head>
+<body>
+    <div class="app-container">
+        <!-- Sidebar -->
+        <aside class="sidebar">
+            <div class="sidebar-header">
+                <h2>💊 HealthTrack</h2>
+                <p class="sidebar-subtitle">Sistema de Farmacia</p>
+            </div>
+            
+            <nav class="sidebar-nav">
+                <a href="dashboard.html" class="nav-item">
+                    <span class="nav-icon">📊</span>
+                    <span class="nav-text">Dashboard</span>
+                </a>
+                <a href="pos.html" class="nav-item">
+                    <span class="nav-icon">🛒</span>
+                    <span class="nav-text">Punto de Venta</span>
+                </a>
+                <a href="patients.html" class="nav-item">
+                    <span class="nav-icon">👥</span>
+                    <span class="nav-text">Pacientes</span>
+                </a>
+                <a href="inventory.html" class="nav-item">
+                    <span class="nav-icon">📦</span>
+                    <span class="nav-text">Inventario</span>
+                </a>
+                <a href="doctors.html" class="nav-item">
+                    <span class="nav-icon">👨‍⚕️</span>
+                    <span class="nav-text">Doctores</span>
+                </a>
+                <a href="invoices.html" class="nav-item active">
+                    <span class="nav-icon">🧾</span>
+                    <span class="nav-text">Facturas</span>
+                </a>
+            </nav>
+            
+            <div class="sidebar-footer">
+                <div class="user-info">
+                    <div class="user-avatar" id="userAvatar">U</div>
+                    <div class="user-details">
+                        <div class="user-name" id="userName">Usuario</div>
+                        <div class="user-role" id="userRole">Rol</div>
+                    </div>
+                </div>
+                <button class="btn-logout" id="logoutBtn">Cerrar Sesión</button>
+            </div>
+        </aside>
+
+        <!-- Main Content -->
+        <main class="main-content">
+            <div class="content-wrapper">
+                <!-- Page Header -->
+                <div class="page-header">
+                    <h1>🧾 Gestión de Facturas</h1>
+                    <p class="page-subtitle">Ver, anular y procesar reembolsos de facturas</p>
+                </div>
+
+                <!-- Stats Cards -->
+                <div class="stats-container">
+                    <div class="stat-card">
+                        <div class="stat-icon">🧾</div>
+                        <div class="stat-content">
+                            <div class="stat-label">Total Facturas</div>
+                            <div class="stat-value" id="statTotal">0</div>
+                        </div>
+                    </div>
+                    <div class="stat-card">
+                        <div class="stat-icon">✅</div>
+                        <div class="stat-content">
+                            <div class="stat-label">Activas</div>
+                            <div class="stat-value" id="statActive">0</div>
+                        </div>
+                    </div>
+                    <div class="stat-card">
+                        <div class="stat-icon">❌</div>
+                        <div class="stat-content">
+                            <div class="stat-label">Anuladas</div>
+                            <div class="stat-value" id="statVoided">0</div>
+                        </div>
+                    </div>
+                    <div class="stat-card">
+                        <div class="stat-icon">💰</div>
+                        <div class="stat-content">
+                            <div class="stat-label">Ingresos Totales</div>
+                            <div class="stat-value" id="statRevenue">₡0</div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Filters & Search -->
+                <div class="card">
+                    <div class="card-header">
+                        <h3>🔍 Buscar y Filtrar Facturas</h3>
+                    </div>
+                    <div class="card-body">
+                        <div class="search-container">
+                            <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 15px;">
+                                <div class="form-group">
+                                    <label>Número de Factura</label>
+                                    <input type="number" id="searchInvoiceId" class="form-control" placeholder="Ej: 123">
+                                </div>
+                                <div class="form-group">
+                                    <label>Fecha Inicio</label>
+                                    <input type="date" id="filterStartDate" class="form-control">
+                                </div>
+                                <div class="form-group">
+                                    <label>Fecha Fin</label>
+                                    <input type="date" id="filterEndDate" class="form-control">
+                                </div>
+                                <div class="form-group">
+                                    <label>Estado</label>
+                                    <select id="filterStatus" class="form-control">
+                                        <option value="All">Todas</option>
+                                        <option value="Active">Activas</option>
+                                        <option value="Voided">Anuladas</option>
+                                        <option value="Refunded">Con Reembolso</option>
+                                    </select>
+                                </div>
+                            </div>
+                            <div style="display: flex; gap: 10px; margin-top: 15px;">
+                                <button class="btn btn-primary" id="btnSearch">
+                                    🔍 Buscar
+                                </button>
+                                <button class="btn btn-secondary" id="btnClearFilters">
+                                    ↺ Limpiar Filtros
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Results -->
+                <div class="card">
+                    <div class="card-header">
+                        <h3>📋 Resultados</h3>
+                    </div>
+                    <div class="card-body">
+                        <div id="loadingSpinner" style="text-align: center; padding: 40px; display: none;">
+                            <div class="spinner"></div>
+                            <p>Cargando facturas...</p>
+                        </div>
+                        
+                        <div id="invoicesTableContainer" style="overflow-x: auto;">
+                            <table class="table" id="invoicesTable">
+                                <thead>
+                                    <tr>
+                                        <th>Factura #</th>
+                                        <th>Fecha</th>
+                                        <th>Paciente</th>
+                                        <th>Total</th>
+                                        <th>Paciente Paga</th>
+                                        <th>Estado</th>
+                                        <th>Items</th>
+                                        <th>Acciones</th>
+                                    </tr>
+                                </thead>
+                                <tbody id="invoicesTableBody">
+                                    <tr>
+                                        <td colspan="8" style="text-align: center; padding: 40px; color: #666;">
+                                            Use los filtros para buscar facturas
+                                        </td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </main>
+    </div>
+
+    <!-- Modal Container (created dynamically by JS) -->
+    <div id="modalContainer"></div>
+
+    <script src="js/invoices.js"></script>
+</body>
+</html>

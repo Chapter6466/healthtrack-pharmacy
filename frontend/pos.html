@@ -1,0 +1,276 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Punto de Venta - HealthTrack Systems</title>
+    <link rel="stylesheet" href="css/styles.css">
+</head>
+<body>
+    <div class="app-container">
+        <!-- Sidebar -->
+        <aside class="sidebar">
+            <div class="sidebar-header">
+                <img src="img/healthtrack-logo.png" alt="HealthTrack" style="width: 180px; height: auto;">
+            </div>
+            
+            <nav class="sidebar-nav">
+                <a href="dashboard.html" class="nav-item">
+                    <span class="icon">📊</span>
+                    <span>Dashboard</span>
+                </a>
+                <a href="pos.html" class="nav-item active">
+                    <span class="icon">💰</span>
+                    <span>Punto de Venta</span>
+                </a>
+                <a href="inventory.html" class="nav-item">
+                    <span class="icon">📦</span>
+                    <span>Inventario</span>
+                </a>
+                <a href="patients.html" class="nav-item">
+                    <span class="icon">👥</span>
+                    <span>Pacientes</span>
+                </a>
+                    <a href="doctors.html" class="nav-item">
+                    <span class="nav-icon">👨‍⚕️</span>
+                    <span class="nav-text">Doctores</span>
+                </a>
+                    <a href="invoices.html" class="nav-item">
+                    <span class="nav-icon">🧾</span>
+                    <span class="nav-text">Facturas</span>
+                </a>
+                <a href="users.html" class="nav-item" id="usersNavItem" style="display: none;">
+                    <span class="icon">👤</span>
+                    <span>Usuarios</span>
+                </a>
+            </nav>
+            
+            <div class="sidebar-footer">
+                <div class="user-info">
+                    <div class="user-avatar" id="userAvatar">U</div>
+                    <div class="user-details">
+                        <div class="user-name" id="userName">Usuario</div>
+                        <div class="user-role" id="userRole">Rol</div>
+                    </div>
+                </div>
+                <button class="btn btn-danger btn-block btn-sm" id="logoutBtn">
+                    Cerrar Sesión
+                </button>
+            </div>
+        </aside>
+        
+        <!-- Main Content -->
+        <main class="main-content">
+            <div class="top-bar">
+                <h1 class="page-title">💰 Punto de Venta</h1>
+                <div class="top-bar-actions">
+                    <span id="currentDate"></span>
+                </div>
+            </div>
+            
+            <div class="content">
+                <div class="pos-layout">
+                    <!-- Left Side - Product Search & Selection -->
+                    <div class="pos-left">
+                        <!-- Search Section -->
+                        <div class="card">
+                            <div class="search-section">
+                                <div class="search-bar">
+                                    <input type="text" 
+                                           id="productSearch" 
+                                           class="form-control" 
+                                           placeholder="🔍 Buscar producto por nombre, código o categoría...">
+                                    <button class="btn btn-primary" id="searchBtn">
+                                        Buscar
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <!-- Products Grid -->
+                        <div class="card" style="flex: 1; overflow: hidden; display: flex; flex-direction: column;">
+                            <div class="card-header">
+                                <h3 class="card-title">Productos Disponibles</h3>
+                            </div>
+                            <div id="productsGrid" class="product-grid" style="flex: 1; overflow-y: auto; padding: 15px;">
+                                <p class="text-muted text-center">Use el buscador para encontrar productos</p>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <!-- Right Side - Shopping Cart -->
+                    <div class="cart-panel">
+                        <div class="cart-header">
+                            <h3>🛒 Carrito de Compras</h3>
+                            <button class="btn btn-sm btn-danger" id="clearCartBtn">
+                                Limpiar
+                            </button>
+                        </div>
+                        
+                        <!-- Patient Selection -->
+                        <div style="padding: 15px; border-bottom: 1px solid #ddd;">
+                            <label>Paciente (Opcional)</label>
+                            <div style="display: flex; gap: 10px;">
+                                <input type="text" 
+                                       id="patientSearch" 
+                                       class="form-control" 
+                                       placeholder="Buscar paciente...">
+                                <button class="btn btn-sm btn-primary" id="selectPatientBtn">
+                                    Buscar
+                                </button>
+                            </div>
+                            <div id="selectedPatient" style="margin-top: 10px; display: none;">
+                                <div class="alert alert-info">
+                                    <strong id="patientName"></strong>
+                                    <button class="btn btn-sm btn-danger" id="clearPatientBtn" style="float: right;">
+                                        ✕
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <!-- Cart Items -->
+                        <div class="cart-items" id="cartItems">
+                            <p class="text-muted text-center" style="margin-top: 50px;">
+                                El carrito está vacío
+                            </p>
+                        </div>
+                        
+                        <!-- Cart Totals -->
+                        <div class="cart-totals">
+                            <div class="total-row">
+                                <span>Subtotal:</span>
+                                <span id="subtotal">$0.00</span>
+                            </div>
+                            <div class="total-row">
+                                <span>IVA (13%):</span>
+                                <span id="tax">$0.00</span>
+                            </div>
+                            <div class="total-row">
+                                <span>Descuento:</span>
+                                <span id="discount">$0.00</span>
+                            </div>
+                            <div class="total-row grand-total">
+                                <span>TOTAL:</span>
+                                <span id="grandTotal">$0.00</span>
+                            </div>
+                        </div>
+                        
+                        <!-- Checkout Actions -->
+                        <div class="cart-actions">
+                            <button class="btn btn-success btn-block btn-lg" id="checkoutBtn" disabled>
+                                💳 Procesar Venta
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </main>
+    </div>
+    
+    <!-- Patient Selection Modal (Simple) -->
+    <div id="patientModal" class="modal" style="display: none;">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h3>Seleccionar Paciente</h3>
+                <button class="btn btn-sm" id="closePatientModal">✕</button>
+            </div>
+            <div class="modal-body" id="patientResults">
+                <!-- Patient search results will appear here -->
+            </div>
+        </div>
+    </div>
+    
+    <!-- Payment Modal -->
+    <div id="paymentModal" class="modal" style="display: none;">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h3>Procesar Pago</h3>
+            </div>
+            <div class="modal-body">
+                <div class="form-group">
+                    <label>Método de Pago</label>
+                    <select id="paymentMethod" class="form-control">
+                        <option value="CASH">Efectivo</option>
+                        <option value="CARD">Tarjeta</option>
+                        <option value="TRANSFER">Transferencia</option>
+                        <option value="INSURANCE">Seguro</option>
+                    </select>
+                </div>
+                <div class="form-group">
+                    <label>Monto Recibido</label>
+                    <input type="number" id="paymentAmount" class="form-control" step="0.01">
+                </div>
+                <div class="form-group">
+                    <label>Referencia (Opcional)</label>
+                    <input type="text" id="paymentReference" class="form-control">
+                </div>
+                <div style="display: flex; gap: 10px; margin-top: 20px;">
+                    <button class="btn btn-success btn-block" id="confirmPaymentBtn">
+                        Confirmar Pago
+                    </button>
+                    <button class="btn btn-danger btn-block" id="cancelPaymentBtn">
+                        Cancelar
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    <style>
+        /* Modal Styles */
+        .modal {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0,0,0,0.5);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            z-index: 10000;
+        }
+        
+        .modal-content {
+            background: white;
+            border-radius: 8px;
+            padding: 20px;
+            max-width: 600px;
+            width: 90%;
+            max-height: 80vh;
+            overflow-y: auto;
+        }
+        
+        .modal-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 20px;
+            padding-bottom: 10px;
+            border-bottom: 2px solid #f0f0f0;
+        }
+        
+        .modal-body {
+            margin-top: 15px;
+        }
+    </style>
+    
+    <script src="js/utils.js"></script>
+    <script src="js/pos.js"></script>
+    <script>
+    // Show Users menu item only for admins
+    document.addEventListener('DOMContentLoaded', async () => {
+        const response = await fetch('/api/auth/session');
+        const data = await response.json();
+        
+        if (data.loggedIn && data.user && data.user.roleName === 'Administrator') {
+            const usersNavItem = document.getElementById('usersNavItem');
+            if (usersNavItem) {
+                usersNavItem.style.display = 'flex';
+            }
+        }
+    });
+    </script>
+</body>
+</html>

@@ -1,0 +1,149 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Gestión de Usuarios - HealthTrack Systems</title>
+    <link rel="stylesheet" href="css/styles.css">
+</head>
+<body>
+    <div class="app-container">
+        <!-- Sidebar -->
+        <aside class="sidebar">
+            <div class="sidebar-header">
+                <img src="img/healthtrack-logo.png" alt="HealthTrack" style="width: 180px; height: auto;">
+            </div>
+            
+            <nav class="sidebar-nav">
+                <a href="dashboard.html" class="nav-item">
+                    <span class="icon">📊</span>
+                    <span>Dashboard</span>
+                </a>
+                <a href="pos.html" class="nav-item">
+                    <span class="icon">💰</span>
+                    <span>Punto de Venta</span>
+                </a>
+                <a href="inventory.html" class="nav-item">
+                    <span class="icon">📦</span>
+                    <span>Inventario</span>
+                </a>
+                <a href="patients.html" class="nav-item">
+                    <span class="icon">👥</span>
+                    <span>Pacientes</span>
+                </a>
+                    <a href="doctors.html" class="nav-item">
+                    <span class="nav-icon">👨‍⚕️</span>
+                    <span class="nav-text">Doctores</span>
+                </a>
+                <a href="invoices.html" class="nav-item">
+                    <span class="nav-icon">🧾</span>
+                    <span class="nav-text">Facturas</span>
+                </a>
+                <a href="users.html" class="nav-item active" id="usersNavItem" style="display: none;">
+                    <span class="icon">👤</span>
+                    <span>Usuarios</span>
+                </a>
+            </nav>
+            
+            <div class="sidebar-footer">
+                <div class="user-info">
+                    <div class="user-avatar" id="userAvatar">U</div>
+                    <div class="user-details">
+                        <div class="user-name" id="userName">Usuario</div>
+                        <div class="user-role" id="userRole">Rol</div>
+                    </div>
+                </div>
+                <button class="btn btn-danger btn-block btn-sm" id="logoutBtn">
+                    Cerrar Sesión
+                </button>
+            </div>
+        </aside>
+        
+        <!-- Main Content -->
+        <main class="main-content">
+            <div class="top-bar">
+                <h1 class="page-title">👤 Gestión de Usuarios</h1>
+                <div class="top-bar-actions">
+                    <button class="btn btn-primary" id="addUserBtn">
+                        ➕ Nuevo Usuario
+                    </button>
+                </div>
+            </div>
+            
+            <div class="content">
+                <!-- Users List -->
+                <div class="card">
+                    <div class="card-header">
+                        <h3 class="card-title">Usuarios del Sistema</h3>
+                    </div>
+                    <div id="usersList">
+                        <div class="spinner"></div>
+                    </div>
+                </div>
+            </div>
+        </main>
+    </div>
+    
+    <!-- Add/Edit User Modal -->
+    <div id="userModal" class="modal" style="display: none;">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h3 id="modalTitle">Nuevo Usuario</h3>
+                <button class="btn btn-sm" id="closeUserModal">✕</button>
+            </div>
+            <div class="modal-body">
+                <form id="userForm">
+                    <div class="form-group">
+                        <label>Nombre de Usuario *</label>
+                        <input type="text" id="username" class="form-control" required>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label>Contraseña *</label>
+                        <input type="password" id="password" class="form-control" required>
+                        <small class="text-muted">Dejar en blanco para mantener contraseña actual (al editar)</small>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label>Nombre Completo *</label>
+                        <input type="text" id="fullName" class="form-control" required>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label>Email</label>
+                        <input type="email" id="email" class="form-control">
+                    </div>
+                    
+                    <div class="form-group">
+                        <label>Rol *</label>
+                        <select id="roleId" class="form-control" required>
+                            <option value="">Seleccione un rol...</option>
+                        </select>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label>Almacén Predeterminado</label>
+                        <select id="warehouseId" class="form-control">
+                            <option value="">Ninguno</option>
+                            <option value="1">Almacén Principal</option>
+                            <option value="2">Almacén Retail</option>
+                        </select>
+                    </div>
+                    
+                    <div style="display: flex; gap: 10px; margin-top: 20px;">
+                        <button type="submit" class="btn btn-success btn-block">
+                            Guardar Usuario
+                        </button>
+                        <button type="button" class="btn btn-danger btn-block" id="cancelUserBtn">
+                            Cancelar
+                        </button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+    
+    <script src="js/utils.js"></script>
+    <script src="js/users.js"></script>
+</body>
+</html>
