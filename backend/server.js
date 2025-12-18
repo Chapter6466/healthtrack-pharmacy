@@ -44,6 +44,7 @@ app.use('/api/patients', require('./routes/patients'));
 app.use('/api/doctors', require('./routes/doctors'));
 app.use('/api/sales', require('./routes/sales'));
 app.use('/api/invoices', require('./routes/invoices'));
+app.use('/api/reports', require('./routes/reports'));
 
 // Serve login page by default
 app.get('/', (req, res) => {

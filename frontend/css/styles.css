@@ -24,7 +24,7 @@
 body {
     font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
     background: #f0f2f5;
-    color: var(--text-dark);
+    color: white;
     line-height: 1.6;
 }
 
@@ -219,7 +219,7 @@ body {
 .card-title {
     font-size: 18px;
     font-weight: 600;
-    color: var(--text-dark);
+    color: white;
 }
 
 /* Form Elements */
@@ -230,7 +230,7 @@ body {
 .form-group label {
     display: block;
     margin-bottom: 5px;
-    color: var(--text-dark);
+    color: white;
     font-weight: 500;
     font-size: 14px;
 }
@@ -280,20 +280,25 @@ textarea.form-control {
 }
 
 .table thead {
-    background: var(--light-gray);
+    background: #E8F0F7;  /* Light blue background */
+    color: var(--text-dark);
 }
 
-.table th {
+.table thead th {
     padding: 12px;
     text-align: left;
     font-weight: 600;
-    color: var(--text-dark);
-    border-bottom: 2px solid var(--border-color);
+    color: #1a3a5c;  /* Dark blue text */
+    border-bottom: 2px solid #B8D4E8;
+    text-transform: uppercase;
+    font-size: 13px;
+    letter-spacing: 0.5px;
 }
 
 .table td {
     padding: 12px;
     border-bottom: 1px solid var(--border-color);
+    color: var(--text-dark);  /* Dark text for data */
 }
 
 .table tbody tr:hover {
@@ -444,20 +449,29 @@ textarea.form-control {
 .test-credentials {
     margin-top: 25px;
     padding: 15px;
-    background: var(--light-gray);
+    background: rgba(255, 255, 255, 0.1);
+    color: white;
     border-radius: 5px;
     font-size: 13px;
+    border: 1px solid rgba(255, 255, 255, 0.2);
 }
 
 .test-credentials p {
     margin: 5px 0;
+    color: white;
+}
+
+.test-credentials strong {
+    color: white;
 }
 
 .test-credentials code {
-    background: #e0e0e0;
+    background: rgba(255, 255, 255, 0.9);
+    color: #1a3a5c;
     padding: 3px 8px;
     border-radius: 3px;
     font-family: 'Courier New', monospace;
+    font-weight: 600;
 }
 
 /* ========================================
@@ -583,7 +597,7 @@ textarea.form-control {
 .page-title {
     font-size: 24px;
     font-weight: 600;
-    color: var(--text-dark);
+    color: white;
 }
 
 .top-bar-actions {
@@ -654,7 +668,7 @@ textarea.form-control {
 .stat-details h3 {
     font-size: 28px;
     font-weight: 700;
-    color: var(--text-dark);
+    color: white;
     margin-bottom: 5px;
 }
 
@@ -749,7 +763,7 @@ textarea.form-control {
 .product-card h4 {
     font-size: 14px;
     margin-bottom: 8px;
-    color: var(--text-dark);
+    color: white;
 }
 
 .product-price {
@@ -1194,7 +1208,7 @@ textarea.form-control {
 .stat-value {
     font-size: 28px;
     font-weight: bold;
-    color: var(--text-dark);
+    color: white;
 }
 
 /* Top Bar */
@@ -1240,7 +1254,7 @@ textarea.form-control {
     display: block;
     margin-bottom: 5px;
     font-weight: 600;
-    color: var(--text-dark);
+    color: white;
     font-size: 14px;
 }
 
@@ -1268,17 +1282,19 @@ textarea.form-control {
 }
 
 .table thead {
-    background: var(--primary-color);
-    color: white;
+    background: #E8F0F7;  /* Light blue background */
+    color: var(--text-dark);
 }
 
 .table thead th {
     padding: 15px 12px;
     text-align: left;
     font-weight: 600;
-    font-size: 14px;
+    font-size: 13px;
+    color: #1a3a5c;  /* Dark blue text */
     text-transform: uppercase;
     letter-spacing: 0.5px;
+    border-bottom: 2px solid #B8D4E8;
 }
 
 .table tbody tr {
@@ -1292,6 +1308,7 @@ textarea.form-control {
 
 .table tbody td {
     padding: 15px 12px;
+    color: var(--text-dark);
     font-size: 14px;
 }
 
@@ -1494,7 +1511,7 @@ textarea.form-control {
 .page-header h1 {
     margin: 0 0 5px 0;
     font-size: 32px;
-    color: var(--text-dark);
+    color: white;
 }
 
 .page-subtitle {
@@ -1670,4 +1687,470 @@ textarea.form-control {
     .stats-container {
         grid-template-columns: 1fr;
     }
+}
+
+/* Reports layout helpers */
+.report-filters {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+  gap: 15px;
+}
+
+.stat-card .stat-subvalue {
+  margin-top: 4px;
+}
+/* ========================================
+   UTILITY CLASSES
+   ======================================== */
+
+/* Display Utilities */
+.d-none {
+    display: none !important;
+}
+
+.d-block {
+    display: block;
+}
+
+.d-flex {
+    display: flex;
+}
+
+.d-grid {
+    display: grid;
+}
+
+/* Flexbox Utilities */
+.flex-column {
+    flex-direction: column;
+}
+
+.flex-wrap {
+    flex-wrap: wrap;
+}
+
+.align-items-center {
+    align-items: center;
+}
+
+.align-items-end {
+    align-items: flex-end;
+}
+
+.justify-content-between {
+    justify-content: space-between;
+}
+
+.justify-content-center {
+    justify-content: center;
+}
+
+.flex-1 {
+    flex: 1;
+}
+
+/* Gap Utilities */
+.gap-10 {
+    gap: 10px;
+}
+
+.gap-15 {
+    gap: 15px;
+}
+
+.gap-20 {
+    gap: 20px;
+}
+
+/* Grid Utilities */
+.grid-auto-fit {
+    grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+}
+
+.grid-3col {
+    grid-template-columns: 1fr 1fr auto;
+    gap: 15px;
+}
+
+.grid-search {
+    grid-template-columns: 2fr 2fr 1fr;
+    gap: 15px;
+    align-items: end;
+}
+
+/* Spacing Utilities */
+.m-0 {
+    margin: 0 !important;
+}
+
+.mt-10 {
+    margin-top: 10px;
+}
+
+.mt-15 {
+    margin-top: 15px;
+}
+
+.mt-20 {
+    margin-top: 20px;
+}
+
+.mt-50 {
+    margin-top: 50px;
+}
+
+.mb-0 {
+    margin-bottom: 0 !important;
+}
+
+.mr-5 {
+    margin-right: 5px;
+}
+
+.p-15 {
+    padding: 15px;
+}
+
+.p-20 {
+    padding: 20px;
+}
+
+.p-30 {
+    padding: 30px;
+}
+
+.p-40 {
+    padding: 40px;
+}
+
+/* Text Utilities */
+.text-center {
+    text-align: center;
+}
+
+.text-muted {
+    color: #666;
+}
+
+.text-white {
+    color: white;
+}
+
+.text-sm {
+    font-size: 12px;
+}
+
+.text-md {
+    font-size: 14px;
+}
+
+/* Position Utilities */
+.position-relative {
+    position: relative;
+}
+
+.float-right {
+    float: right;
+}
+
+/* Overflow Utilities */
+.overflow-x-auto {
+    overflow-x: auto;
+}
+
+.overflow-y-auto {
+    overflow-y: auto;
+}
+
+.overflow-hidden {
+    overflow: hidden;
+}
+
+/* Width/Height Utilities */
+.w-100 {
+    width: 100%;
+}
+
+.h-42 {
+    height: 42px;
+}
+
+/* Border Utilities */
+.border-bottom {
+    border-bottom: 1px solid #ddd;
+}
+
+.border-top {
+    border-top: 1px solid #ddd;
+}
+
+.border-none {
+    border: none;
+}
+
+/* Logo Sizing */
+.logo-img {
+    width: 180px;
+    height: auto;
+}
+
+/* Custom Layout Classes */
+.card-header-with-actions {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.filter-group-flex {
+    display: flex;
+    align-items: flex-end;
+}
+
+.filter-label-block {
+    display: block;
+    width: 100%;
+}
+
+.payment-actions {
+    display: flex;
+    gap: 10px;
+    margin-top: 15px;
+}
+
+.selected-patient-info {
+    margin-top: 10px;
+}
+
+.products-flex-container {
+    flex: 1;
+    overflow: hidden;
+    display: flex;
+    flex-direction: column;
+}
+
+.products-grid-scroll {
+    flex: 1;
+    overflow-y: auto;
+    padding: 15px;
+}
+
+.cart-header {
+    padding: 15px;
+    border-bottom: 1px solid #ddd;
+}
+
+.cart-actions {
+    display: flex;
+    gap: 10px;
+}
+
+.loading-spinner-container {
+    text-align: center;
+    padding: 40px;
+}
+
+.subtitle-text {
+    margin: 5px 0 0 0;
+    color: #666;
+    font-size: 14px;
+}
+
+.divider {
+    margin: 10px 0;
+    border: none;
+    border-top: 1px solid #ddd;
+}
+
+.footer-copyright {
+    text-align: center;
+    color: white;
+    margin-top: 20px;
+    font-size: 12px;
+}
+
+.empty-state {
+    text-align: center;
+    color: #666;
+    padding: 40px;
+}
+
+.loading-text {
+    text-align: center;
+    color: #666;
+    padding: 20px;
+}
+
+/* ========================================
+   LANGUAGE TOGGLE
+   ======================================== */
+
+.language-toggle {
+    padding: 15px 20px;
+    border-top: 1px solid rgba(255, 255, 255, 0.1);
+    border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+    margin-bottom: 10px;
+}
+
+.language-toggle-label {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    color: rgba(255, 255, 255, 0.9);
+    font-size: 13px;
+    margin-bottom: 8px;
+    font-weight: 500;
+}
+
+.toggle-switch {
+    position: relative;
+    display: inline-block;
+    width: 50px;
+    height: 24px;
+}
+
+.toggle-switch input {
+    opacity: 0;
+    width: 0;
+    height: 0;
+}
+
+.toggle-slider {
+    position: absolute;
+    cursor: pointer;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background-color: rgba(255, 255, 255, 0.2);
+    transition: 0.3s;
+    border-radius: 24px;
+}
+
+.toggle-slider:before {
+    position: absolute;
+    content: "";
+    height: 18px;
+    width: 18px;
+    left: 3px;
+    bottom: 3px;
+    background-color: white;
+    transition: 0.3s;
+    border-radius: 50%;
+}
+
+input:checked + .toggle-slider {
+    background-color: var(--secondary-color);
+}
+
+input:checked + .toggle-slider:before {
+    transform: translateX(26px);
+}
+
+.language-labels {
+    display: flex;
+    justify-content: space-between;
+    font-size: 11px;
+    color: rgba(255, 255, 255, 0.7);
+    margin-top: 5px;
+}
+
+.language-labels .active {
+    color: white;
+    font-weight: 600;
+}
+
+/* ========================================
+   FONT AWESOME ICON STYLES
+   ======================================== */
+
+.nav-item .icon,
+.nav-item .nav-icon {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 24px;
+    font-size: 18px;
+}
+
+.nav-item .icon i,
+.nav-item .nav-icon i {
+    display: inline-block;
+}
+
+/* Stat card icons */
+.stat-icon i {
+    font-size: 24px;
+}
+
+/* Card title icons */
+.card-title i {
+    margin-right: 8px;
+}
+
+/* Button icons */
+.btn i {
+    margin-right: 5px;
+}
+
+.btn i:only-child {
+    margin-right: 0;
+}
+
+
+/* ========================================
+   TABLE STYLES - CONSOLIDATED
+   ======================================== */
+
+/* Base table */
+.table {
+    width: 100%;
+    border-collapse: collapse;
+    background: white;
+}
+
+/* Table header - Light blue background with dark text */
+.table thead {
+    background: #E8F0F7;
+    border-bottom: 3px solid #B8D4E8;
+}
+
+.table thead th {
+    padding: 15px 12px;
+    text-align: left;
+    font-weight: 600;
+    font-size: 13px;
+    color: #1a3a5c;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+}
+
+/* Alternative: Keep using .table th for backwards compatibility */
+.table th {
+    padding: 12px;
+    text-align: left;
+    font-weight: 600;
+    color: #1a3a5c;
+}
+
+/* Table body - Normal dark text */
+.table tbody tr {
+    border-bottom: 1px solid #e0e0e0;
+    transition: background-color 0.2s;
+}
+
+.table tbody tr:hover {
+    background-color: #f5f7fa;
+}
+
+.table tbody td {
+    padding: 15px 12px;
+    font-size: 14px;
+    color: #333;
+}
+
+/* Also standard .table td */
+.table td {
+    padding: 12px;
+    border-bottom: 1px solid #ddd;
+    color: #333;
 }
