@@ -50,7 +50,7 @@ async function loadDashboardSummary() {
                 monthSales.textContent = formatCurrency(summary.TotalSalesMonth || 0);
             }
             
-            console.log('✅ Dashboard stats updated');
+            console.log(' Dashboard stats updated');
             
             // Load top products
             await loadTopProducts();
@@ -59,7 +59,7 @@ async function loadDashboardSummary() {
             showToast('No hay datos disponibles en el dashboard', 'info');
         }
     } catch (error) {
-        console.error('❌ Error loading dashboard summary:', error);
+        console.error(' Error loading dashboard summary:', error);
         showToast('Error al cargar resumen del dashboard', 'danger');
     }
 }
@@ -101,7 +101,7 @@ async function loadExpiringMedications() {
                                 <br>
                                 <small>Lote: ${item.BatchCode} | Vence: ${formatDate(item.ExpiryDate)}</small>
                                 <br>
-                                <small>Stock: ${item.TotalQuantity} ${item.Unit} | ${days} días restantes</small>
+                                <small>Stock: ${item.TotalQuantity} ${item.Unit} | ${days} d restantes</small>
                             </div>
                             ${days <= 15 ? '<span class="badge badge-danger">URGENTE</span>' : ''}
                         </li>
@@ -109,7 +109,7 @@ async function loadExpiringMedications() {
                 }).join('') +
             '</ul>';
         } else {
-            container.innerHTML = '<p class="text-muted text-center">No hay medicamentos próximos a vencer</p>';
+            container.innerHTML = '<p class="text-muted text-center">No hay medicamentos pr a vencer</p>';
         }
     } catch (error) {
         console.error('Error loading expiring medications:', error);
@@ -138,7 +138,7 @@ async function loadLowStockAlerts() {
                                 <br>
                                 <small>Stock actual: ${item.TotalQuantity} ${item.Unit}</small>
                                 <br>
-                                <small>Punto de reorden: ${item.ReorderPoint} | Máximo: ${item.MaxStock}</small>
+                                <small>Punto de reorden: ${item.ReorderPoint} | M ${item.MaxStock}</small>
                             </div>
                             <span class="badge badge-warning">${Math.round(percentage)}%</span>
                         </li>

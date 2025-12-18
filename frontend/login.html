@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>HealthTrack Systems - Iniciar Sesión</title>
+    <title>HealthTrack Systems - Iniciar Sesion</title>
     <link rel="stylesheet" href="css/styles.css">
     <style>
         .login-page {
@@ -30,23 +30,24 @@
             margin-top: 10px;
         }
     </style>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
 </head>
 <body class="login-page">
     <div class="login-container">
         <div class="login-card">
             <div class="login-logo">
                 <img src="img/healthtrack-logo.png" alt="HealthTrack Systems">
-                <p class="login-tagline">Control, precisión y bienestar.</p>
+                <p class="login-tagline">Control, precision y bienestar.</p>
             </div>
             
             <div class="login-header">
-                <h1>Sistema de Gestión Farmacéutica</h1>
+                <h1>Sistema de Gestion Farmaceutica</h1>
                 <p>Ingrese sus credenciales para continuar</p>
             </div>
             
             <form id="loginForm">
                 <div class="form-group">
-                    <label for="username">Usuario</label>
+                    <label for="username" data-i18n="user">Usuario</label>
                     <input type="text" 
                            id="username" 
                            class="form-control" 
@@ -56,37 +57,37 @@
                 </div>
                 
                 <div class="form-group">
-                    <label for="password">Contraseña</label>
+                    <label for="password">Contrasena</label>
                     <input type="password" 
                            id="password" 
                            class="form-control" 
-                           placeholder="Ingrese su contraseña" 
+                           placeholder="Ingrese su contrasena" 
                            required
                            autocomplete="current-password">
                 </div>
                 
                 <button type="submit" class="btn btn-primary btn-block btn-lg">
-                    Iniciar Sesión
+                    Iniciar Sesion
                 </button>
                 
-                <div id="errorMsg" class="error-msg" style="display:none;"></div>
+                <div id="errorMsg" class="error-msg" class="d-none"></div>
                 
-                <div id="loadingSpinner" class="spinner" style="display:none;"></div>
+                <div id="loadingSpinner" class="spinner" class="d-none"></div>
             </form>
             
             <div class="test-credentials">
-                <p><strong>🔐 Credenciales de Prueba:</strong></p>
-                <p><strong>Farmacéutico:</strong></p>
+                <p><strong><i class="fas fa-circle"></i> Credenciales de Prueba:</strong></p>
+                <p><strong>Farmaceutico:</strong></p>
                 <p>Usuario: <code>JD12345</code></p>
-                <p>Contraseña: <code>JOHND_HASH_12345</code></p>
-                <hr style="margin: 10px 0; border: none; border-top: 1px solid #ddd;">
+                <p>Contrasena: <code>JOHND_HASH_12345</code></p>
+                <hr class="divider">
                 <p><strong>Administrador:</strong></p>
                 <p>Usuario: <code>admin</code></p>
-                <p>Contraseña: <code>ADMIN_HASH_12345</code></p>
+                <p>Contrasena: <code>ADMIN_HASH_12345</code></p>
             </div>
         </div>
         
-        <p style="text-align: center; color: white; margin-top: 20px; font-size: 12px;">
+        <p class="footer-copyright">
             &copy; 2025 HealthTrack Systems. Todos los derechos reservados.
         </p>
     </div>
@@ -101,10 +102,11 @@
         if (data.loggedIn && data.user && data.user.roleName === 'Administrator') {
             const usersNavItem = document.getElementById('usersNavItem');
             if (usersNavItem) {
-                usersNavItem.style.display = 'flex';
+                usersNavItem.classList.remove('d-none');
             }
         }
     });
     </script>
+    <script src="js/language.js"></script>
 </body>
 </html>

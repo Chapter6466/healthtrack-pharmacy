@@ -93,7 +93,7 @@ function displayUsers(users) {
                     <th>Nombre Completo</th>
                     <th>Email</th>
                     <th>Rol</th>
-                    <th>Almacén</th>
+                    <th>Almac
                     <th>Estado</th>
                     <th>Acciones</th>
                 </tr>
@@ -118,11 +118,11 @@ function displayUsers(users) {
                         </td>
                         <td>
                             <button class="btn btn-sm btn-primary" onclick="editUser(${user.UserID})">
-                                ✏️ Editar
+                                 Editar
                             </button>
                             <button class="btn btn-sm btn-${user.IsActive ? 'warning' : 'success'}" 
                                     onclick="toggleUserStatus(${user.UserID}, ${!user.IsActive})">
-                                ${user.IsActive ? '🚫 Desactivar' : '✅ Activar'}
+                                ${user.IsActive ? ' Desactivar' : ' Activar'}
                             </button>
                         </td>
                     </tr>
@@ -231,7 +231,7 @@ async function saveUser(e) {
 async function toggleUserStatus(userId, newStatus) {
     const action = newStatus ? 'activar' : 'desactivar';
     
-    if (!confirm(`¿Está seguro que desea ${action} este usuario?`)) {
+    if (!confirm(`t seguro que desea ${action} este usuario?`)) {
         return;
     }
     
