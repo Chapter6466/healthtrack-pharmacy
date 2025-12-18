@@ -26,7 +26,7 @@ async function initInventory() {
         await loadInventory();
     } catch (error) {
         console.error('Init inventory error:', error);
-        showToast('Error al inicializar página', 'danger');
+        showToast('Error al inicializar p 'danger');
     }
 }
 
@@ -94,7 +94,7 @@ async function loadWarehouses() {
     if (warehouseSelect) {
         warehouseSelect.innerHTML = `
             <option value="">Todos los almacenes</option>
-            <option value="1">Almacén Principal</option>
+            <option value="1">Almac Principal</option>
         `;
     }
 }
@@ -126,7 +126,7 @@ async function loadInventory() {
         if (data.success && data.inventory) {
             inventoryData = data.inventory;
             filteredData = [...inventoryData];
-            console.log('✅ Inventory loaded:', inventoryData.length, 'items');
+            console.log(' Inventory loaded:', inventoryData.length, 'items');
             updateStatistics();
             displayInventory();
         } else {
@@ -134,7 +134,7 @@ async function loadInventory() {
             container.innerHTML = '<p class="text-muted text-center" style="padding: 40px;">No hay datos de inventario disponibles</p>';
         }
     } catch (error) {
-        console.error('❌ Error loading inventory:', error);
+        console.error(' Error loading inventory:', error);
         container.innerHTML = '<p class="text-danger text-center" style="padding: 40px;">Error al cargar inventario: ' + error.message + '</p>';
         showToast('Error al cargar inventario', 'danger');
     }
@@ -185,7 +185,7 @@ function updateStatistics() {
         const totalValue = document.getElementById('totalValue');
         if (totalValue) totalValue.textContent = formatCurrency(stats.totalValue);
         
-        console.log('✅ Statistics updated:', stats);
+        console.log(' Statistics updated:', stats);
     } catch (error) {
         console.error('Statistics error:', error);
     }
@@ -207,7 +207,7 @@ function displayInventory() {
                 <thead>
                     <tr>
                         <th>Producto</th>
-                        <th>Categoría</th>
+                        <th>Categor
                         <th>Lote</th>
                         <th>Stock Actual</th>
                         <th>Min/Max</th>
@@ -230,16 +230,16 @@ function displayInventory() {
                             <td>${item.ExpiryDate ? formatDate(item.ExpiryDate) : 'N/A'}</td>
                             <td>
                                 <button class="btn btn-sm btn-info" onclick="viewProductDetails(${item.ProductID})" title="Ver detalles">
-                                    👁️
+                                    
                                 </button>
                                 <button class="btn btn-sm btn-warning" onclick="editProduct(${item.ProductID})" title="Editar">
-                                    ✏️
+                                    
                                 </button>
                                 <button class="btn btn-sm btn-primary" onclick="adjustStock(${item.ProductID}, ${item.BatchID}, ${item.WarehouseID}, ${item.LocationID})" title="Ajustar stock">
-                                    📊
+                                    
                                 </button>
                                 <button class="btn btn-sm btn-danger" onclick="deleteProduct(${item.ProductID}, '${escapeHtml(item.ProductName)}')" title="Eliminar">
-                                    🗑️
+                                    
                                 </button>
                             </td>
                         </tr>
@@ -256,10 +256,10 @@ function displayInventory() {
 // Get stock status badge
 function getStockStatusBadge(status) {
     const badges = {
-        'CRITICAL': '<span class="badge badge-danger">🔴 Crítico</span>',
-        'LOW': '<span class="badge badge-warning">🟡 Bajo</span>',
-        'NORMAL': '<span class="badge badge-success">🟢 Normal</span>',
-        'OVERSTOCK': '<span class="badge badge-info">🔵 Exceso</span>'
+        'CRITICAL': '<span class="badge badge-danger"> Cr
+        'LOW': '<span class="badge badge-warning"> Bajo</span>',
+        'NORMAL': '<span class="badge badge-success"> Normal</span>',
+        'OVERSTOCK': '<span class="badge badge-info"> Exceso</span>'
     };
     return badges[status] || '<span class="badge">N/A</span>';
 }
@@ -283,8 +283,8 @@ function showAddProductModal() {
         modal.innerHTML = `
             <div class="modal-content" style="width: 700px;">
                 <div class="modal-header">
-                    <h3>➕ Nuevo Producto</h3>
-                    <button class="btn-close" onclick="closeProductFormModal()">✕</button>
+                    <h3> Nuevo Producto</h3>
+                    <button class="btn-close" onclick="closeProductFormModal()">
                 </div>
                 <div class="modal-body">
                     <form id="productForm" onsubmit="saveProduct(event)">
@@ -297,7 +297,7 @@ function showAddProductModal() {
                         
                         <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 15px;">
                             <div class="form-group">
-                                <label>Categoría *</label>
+                                <label>Categor *</label>
                                 <select id="productCategory" class="form-control" required>
                                     <option value="">Seleccione...</option>
                                     ${categories.map(cat => `<option value="${cat.CategoryID}">${cat.Name}</option>`).join('')}
@@ -315,12 +315,12 @@ function showAddProductModal() {
                         
                         <div style="display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 15px;">
                             <div class="form-group">
-                                <label>Stock Mínimo *</label>
+                                <label>Stock M *</label>
                                 <input type="number" id="productMinStock" class="form-control" value="10" required min="0">
                             </div>
                             
                             <div class="form-group">
-                                <label>Stock Máximo *</label>
+                                <label>Stock M *</label>
                                 <input type="number" id="productMaxStock" class="form-control" value="1000" required min="1">
                             </div>
                             
@@ -331,20 +331,20 @@ function showAddProductModal() {
                         </div>
                         
                         <div class="form-group">
-                            <label>Precio Unitario (₡) *</label>
+                            <label>Precio Unitario ( *</label>
                             <input type="number" id="productPrice" class="form-control" required min="0" step="0.01">
                         </div>
                         
                         <div class="form-group" id="initialStockGroup">
                             <label>Stock Inicial (opcional)</label>
                             <input type="number" id="productInitialStock" class="form-control" min="0" value="" placeholder="Ej: 100">
-                            <small class="text-muted">Cantidad inicial en inventario. Dejar vacío si agregará stock después.</small>
+                            <small class="text-muted">Cantidad inicial en inventario. Dejar vac si agregar stock despu
                         </div>
                         
                         <div class="form-group" id="expiryDateGroup">
                             <label>Fecha de Vencimiento (opcional)</label>
                             <input type="date" id="productExpiryDate" class="form-control" value="">
-                            <small class="text-muted">Solo necesario si agrega stock inicial. Por defecto: 2 años desde hoy.</small>
+                            <small class="text-muted">Solo necesario si agrega stock inicial. Por defecto: 2 a desde hoy.</small>
                         </div>
                         
                         <div class="form-group">
@@ -359,7 +359,7 @@ function showAddProductModal() {
                                 Cancelar
                             </button>
                             <button type="submit" class="btn btn-success">
-                                💾 Guardar
+                                 Guardar
                             </button>
                         </div>
                     </form>
@@ -386,7 +386,7 @@ async function editProduct(productId) {
             showAddProductModal();
             
             setTimeout(() => {
-                document.querySelector('#productFormModal .modal-header h3').textContent = '✏️ Editar Producto';
+                document.querySelector('#productFormModal .modal-header h3').textContent = ' Editar Producto';
                 document.getElementById('productId').value = product.ProductID;
                 document.getElementById('productName').value = product.Name;
                 document.getElementById('productCategory').value = product.CategoryID;
@@ -490,8 +490,8 @@ function adjustStock(productId, batchId, warehouseId, locationId) {
     modal.innerHTML = `
         <div class="modal-content" style="width: 500px;">
             <div class="modal-header">
-                <h3>📊 Ajustar Stock</h3>
-                <button class="btn-close" onclick="closeAdjustStockModal()">✕</button>
+                <h3> Ajustar Stock</h3>
+                <button class="btn-close" onclick="closeAdjustStockModal()">
             </div>
             <div class="modal-body">
                 <div style="background: #f0f8ff; padding: 10px; border-radius: 5px; margin-bottom: 15px;">
@@ -503,9 +503,9 @@ function adjustStock(productId, batchId, warehouseId, locationId) {
                     <div class="form-group">
                         <label>Tipo de Ajuste *</label>
                         <select id="adjustmentType" class="form-control" required onchange="updateAdjustmentPreview(${currentQuantity})">
-                            <option value="ADD">➕ Agregar</option>
-                            <option value="SUBTRACT">➖ Restar</option>
-                            <option value="SET">📝 Establecer cantidad exacta</option>
+                            <option value="ADD"> Agregar</option>
+                            <option value="SUBTRACT"> Restar</option>
+                            <option value="SET"> Establecer cantidad exacta</option>
                         </select>
                     </div>
                     
@@ -520,9 +520,9 @@ function adjustStock(productId, batchId, warehouseId, locationId) {
                     </div>
                     
                     <div class="form-group">
-                        <label>Razón *</label>
-                        <textarea id="adjustmentReason" class="form-control" rows="2" required placeholder="Ej: Recepción de pedido, producto dañado, inventario físico, etc."></textarea>
-                        <small class="text-muted">Obligatorio para fines de auditoría</small>
+                        <label>Raz *</label>
+                        <textarea id="adjustmentReason" class="form-control" rows="2" required placeholder="Ej: Recepci de pedido, producto da inventario f etc."></textarea>
+                        <small class="text-muted">Obligatorio para fines de auditor
                     </div>
                     
                     <div style="display: flex; justify-content: flex-end; gap: 10px; margin-top: 20px;">
@@ -530,7 +530,7 @@ function adjustStock(productId, batchId, warehouseId, locationId) {
                             Cancelar
                         </button>
                         <button type="submit" class="btn btn-primary">
-                            💾 Guardar
+                             Guardar
                         </button>
                     </div>
                 </form>
@@ -569,10 +569,10 @@ function updateAdjustmentPreview(currentQuantity) {
     // Show warning if result would be negative
     if (newQuantity < 0) {
         warningClass = 'background: #f8d7da; color: #721c24;';
-        previewText.innerHTML = `❌ <strong>ERROR:</strong> ${currentQuantity} → ${newQuantity} unidades<br>No hay suficiente stock para esta operación.`;
+        previewText.innerHTML = ` <strong>ERROR:</strong> ${currentQuantity}  ${newQuantity} unidades<br>No hay suficiente stock para esta operaci
     } else {
         warningClass = 'background: #d4edda; color: #155724;';
-        previewText.innerHTML = `✅ Nuevo stock: ${currentQuantity} → <strong>${newQuantity}</strong> unidades`;
+        previewText.innerHTML = ` Nuevo stock: ${currentQuantity}  <strong>${newQuantity}</strong> unidades`;
     }
     
     preview.style.display = 'block';
@@ -600,7 +600,7 @@ async function saveStockAdjustment(event, productId, batchId, warehouseId, locat
         
         // Check if result would be negative
         if (newQuantity < 0) {
-            showToast(`❌ Stock insuficiente. Stock actual: ${currentQuantity} unidades. No se puede realizar esta operación.`, 'danger');
+            showToast(` Stock insuficiente. Stock actual: ${currentQuantity} unidades. No se puede realizar esta operaci 'danger');
             return;
         }
         
@@ -623,7 +623,7 @@ async function saveStockAdjustment(event, productId, batchId, warehouseId, locat
         const data = await response.json();
         
         if (data.success) {
-            showToast(`✅ Stock ajustado: ${data.oldQuantity} → ${data.newQuantity}`, 'success');
+            showToast(` Stock ajustado: ${data.oldQuantity}  ${data.newQuantity}`, 'success');
             closeAdjustStockModal();
             await loadInventory();
         } else {
@@ -646,8 +646,8 @@ async function viewProductDetails(productId) {
             const product = data.product;
             const inventory = data.inventory || [];
             
-            let message = `📦 ${product.Name}\n\n`;
-            message += `Categoría: ${product.CategoryName}\n`;
+            let message = ` ${product.Name}\n\n`;
+            message += `Categor ${product.CategoryName}\n`;
             message += `Precio: ${formatCurrency(product.CurrentPrice || 0)}\n`;
             message += `Stock: ${product.MinStock}/${product.MaxStock}\n\n`;
             
@@ -696,26 +696,26 @@ function deleteProduct(productId, productName) {
     modal.innerHTML = `
         <div class="modal-content" style="width: 500px;">
             <div class="modal-header" style="background: #dc3545; color: white;">
-                <h3>🗑️ Eliminar Producto</h3>
-                <button class="btn-close" onclick="closeDeleteProductModal()" style="color: white;">✕</button>
+                <h3> Eliminar Producto</h3>
+                <button class="btn-close" onclick="closeDeleteProductModal()" style="color: white;">
             </div>
             <div class="modal-body">
                 <div style="background: #fff3cd; border: 1px solid #ffc107; padding: 15px; border-radius: 5px; margin-bottom: 20px;">
-                    <strong>⚠️ ADVERTENCIA</strong><br>
-                    ¿Está seguro que desea eliminar este producto?<br>
+                    <strong>  ADVERTENCIA</strong><br>
+                    t seguro que desea eliminar este producto?<br>
                     <strong style="font-size: 1.1em; color: #dc3545;">${escapeHtml(productName)}</strong>
                 </div>
                 
                 <form id="deleteProductForm" onsubmit="confirmDeleteProduct(event, ${productId}, '${escapeHtml(productName)}')">
                     <div class="form-group">
-                        <label>Razón de Eliminación *</label>
+                        <label>Raz de Eliminaci *</label>
                         <textarea id="deletionReason" class="form-control" rows="3" required 
                             placeholder="Ej: Producto discontinuado, vencido sin posibilidad de venta, error de registro, etc."></textarea>
-                        <small class="text-muted">Obligatorio para fines de auditoría. Esta acción desactivará el producto y sus lotes.</small>
+                        <small class="text-muted">Obligatorio para fines de auditor Esta acci desactivar el producto y sus lotes.</small>
                     </div>
                     
                     <div style="background: #f8d7da; border: 1px solid #dc3545; padding: 10px; border-radius: 5px; margin: 15px 0;">
-                        <small><strong>Nota:</strong> Esta acción desactivará el producto (no lo elimina permanentemente). El producto dejará de aparecer en inventario y no podrá ser vendido.</small>
+                        <small><strong>Nota:</strong> Esta acci desactivar el producto (no lo elimina permanentemente). El producto dejar de aparecer en inventario y no podr ser vendido.</small>
                     </div>
                     
                     <div style="display: flex; justify-content: flex-end; gap: 10px; margin-top: 20px;">
@@ -723,7 +723,7 @@ function deleteProduct(productId, productName) {
                             Cancelar
                         </button>
                         <button type="submit" class="btn btn-danger">
-                            🗑️ Eliminar Producto
+                             Eliminar Producto
                         </button>
                     </div>
                 </form>
@@ -741,7 +741,7 @@ async function confirmDeleteProduct(event, productId, productName) {
     const reason = document.getElementById('deletionReason').value.trim();
     
     if (!reason) {
-        showToast('La razón de eliminación es obligatoria', 'danger');
+        showToast('La raz de eliminaci es obligatoria', 'danger');
         return;
     }
     
@@ -757,10 +757,10 @@ async function confirmDeleteProduct(event, productId, productName) {
         const data = await response.json();
         
         if (data.success) {
-            let message = `✅ ${productName} eliminado`;
+            let message = ` ${productName} eliminado`;
             
             if (data.remainingStock > 0) {
-                message += ` (Tenía ${data.remainingStock} unidades en stock)`;
+                message += ` (Ten ${data.remainingStock} unidades en stock)`;
             }
             
             showToast(message, 'success');

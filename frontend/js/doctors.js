@@ -1,4 +1,3 @@
-
 (function() {
     'use strict';
     
@@ -11,7 +10,7 @@
     let discountRates = [];
     let currentUser = null;
     
-    console.log('🟢 Doctors module starting...');
+    console.log(' Doctors module starting...');
     
     // Initialize on page load
     if (document.readyState === 'loading') {
@@ -24,7 +23,7 @@
     // INITIALIZATION
     // ========================================
     async function init() {
-        console.log('🟢 Initializing doctors module...');
+        console.log(' Initializing doctors module...');
         
         // Initialize user info in sidebar
         currentUser = await initUserInfo();
@@ -58,11 +57,11 @@
                 const userRoleElem = document.querySelector('.user-role');
                 const avatarElem = document.querySelector('.user-avatar');
                 
-                if (userNameElem) userNameElem.textContent = data.user.username || 'Usuario';
-                if (userRoleElem) userRoleElem.textContent = data.user.role || 'Staff';
+                if (userNameElem) userNameElem.textContent = data.user.fullName || 'Usuario';
+                if (userRoleElem) userRoleElem.textContent = data.user.roleName || 'Usuario';
                 if (avatarElem) {
-                    const initial = (data.user.username || 'U').charAt(0).toUpperCase();
-                    avatarElem.textContent = initial;
+                    const initials = (data.user.fullName || 'U').split(' ').map(n => n[0]).join('').substring(0, 2).toUpperCase();
+                    avatarElem.textContent = initials;
                 }
                 
                 return data.user;
@@ -157,13 +156,13 @@
     
     async function loadDoctors() {
         try {
-            console.log('📡 Loading doctors...');
+            console.log(' Loading doctors...');
             const response = await fetch('/api/doctors', {
                 credentials: 'include'
             });
             
             if (response.status === 401) {
-                alert('Tu sesión ha expirado. Por favor inicia sesión nuevamente.');
+                alert('Tu sesi ha expirado. Por favor inicia sesi nuevamente.');
                 window.location.href = '/index.html';
                 return;
             }
@@ -177,7 +176,7 @@
             if (data.success && Array.isArray(data.doctors)) {
                 allDoctors = data.doctors;
                 doctorsData = [...allDoctors];
-                console.log('✅ Loaded', allDoctors.length, 'doctors');
+                console.log(' Loaded', allDoctors.length, 'doctors');
                 displayDoctors();
             } else {
                 allDoctors = [];
@@ -186,8 +185,8 @@
             }
             
         } catch (error) {
-            console.error('❌ Error loading doctors:', error);
-            alert('Error al cargar doctores. Por favor recarga la página.');
+            console.error(' Error loading doctors:', error);
+            alert('Error al cargar doctores. Por favor recarga la p
         }
     }
     
@@ -201,7 +200,7 @@
                 const data = await response.json();
                 if (data.success && Array.isArray(data.providers)) {
                     insuranceProviders = data.providers;
-                    console.log('✅ Loaded', insuranceProviders.length, 'insurance providers');
+                    console.log(' Loaded', insuranceProviders.length, 'insurance providers');
                 }
             }
         } catch (error) {
@@ -220,7 +219,7 @@
                 const data = await response.json();
                 if (data.success && Array.isArray(data.discountRates)) {
                     discountRates = data.discountRates;
-                    console.log('✅ Loaded', discountRates.length, 'discount rates');
+                    console.log(' Loaded', discountRates.length, 'discount rates');
                     displayDiscountRates();
                 }
             }
@@ -262,7 +261,7 @@
     function displayDoctors() {
         const resultsDiv = document.getElementById('doctorsResults');
         if (!resultsDiv) {
-            console.error('❌ Results div not found');
+            console.error(' Results div not found');
             return;
         }
         
@@ -276,7 +275,7 @@
         html += '<th>Nombre</th>';
         html += '<th>Licencia</th>';
         html += '<th>Especialidad</th>';
-        html += '<th>Teléfono</th>';
+        html += '<th>Tel
         html += '<th>Email</th>';
         html += '<th>Seguros</th>';
         html += '<th>Recetas</th>';
@@ -293,9 +292,9 @@
             html += `<td><span class="badge badge-info">${d.InsuranceCount || 0}</span></td>`;
             html += `<td><span class="badge badge-success">${d.PrescriptionCount || 0}</span></td>`;
             html += `<td style="white-space: nowrap;">`;
-            html += `<button class="btn btn-sm btn-primary" onclick="window.viewDoctor(${d.PrescriberID})" title="Ver detalles">👁️</button> `;
-            html += `<button class="btn btn-sm btn-warning" onclick="window.editDoctor(${d.PrescriberID})" title="Editar">✏️</button> `;
-            html += `<button class="btn btn-sm btn-danger" onclick="window.deactivateDoctor(${d.PrescriberID})" title="Desactivar">🗑️</button>`;
+            html += `<button class="btn btn-sm btn-primary" onclick="window.viewDoctor(${d.PrescriberID})" title="Ver detalles"> `;
+            html += `<button class="btn btn-sm btn-warning" onclick="window.editDoctor(${d.PrescriberID})" title="Editar"> `;
+            html += `<button class="btn btn-sm btn-danger" onclick="window.deactivateDoctor(${d.PrescriberID})" title="Desactivar">
             html += `</td>`;
             html += '</tr>';
         });
@@ -319,15 +318,15 @@
             html += '<div style="background: white; border: 2px solid #e0e0e0; border-radius: 8px; padding: 15px;">';
             html += `<div style="display: flex; justify-content: space-between; align-items: start; margin-bottom: 10px;">`;
             html += `<h4 style="margin: 0; color: #333;">${escHtml(dr.InsuranceName)}</h4>`;
-            html += `<button class="btn btn-xs btn-primary" onclick="window.editDiscountRate(${dr.InsuranceProviderID}, '${escHtml(dr.InsuranceName)}', ${dr.DiscountPercentage}, ${dr.MinimumPrescriptionAmount || 0}, ${dr.MaximumDiscountAmount || 0})">✏️</button>`;
+            html += `<button class="btn btn-xs btn-primary" onclick="window.editDiscountRate(${dr.InsuranceProviderID}, '${escHtml(dr.InsuranceName)}', ${dr.DiscountPercentage}, ${dr.MinimumPrescriptionAmount || 0}, ${dr.MaximumDiscountAmount || 0})">
             html += `</div>`;
             html += `<div style="font-size: 32px; font-weight: bold; color: #28a745; margin: 10px 0;">${dr.DiscountPercentage}%</div>`;
             html += `<div style="font-size: 13px; color: #666;">`;
             if (dr.MinimumPrescriptionAmount > 0) {
-                html += `<div>💵 Mínimo: ${fmtCurrency(dr.MinimumPrescriptionAmount)}</div>`;
+                html += `<div> M ${fmtCurrency(dr.MinimumPrescriptionAmount)}</div>`;
             }
             if (dr.MaximumDiscountAmount > 0) {
-                html += `<div>🎯 Máximo: ${fmtCurrency(dr.MaximumDiscountAmount)}</div>`;
+                html += `<div> M ${fmtCurrency(dr.MaximumDiscountAmount)}</div>`;
             }
             if (dr.Description) {
                 html += `<div style="margin-top: 5px; font-style: italic;">${escHtml(dr.Description)}</div>`;
@@ -374,27 +373,27 @@
             html += `<p style="margin: 5px 0;"><strong>Licencia:</strong> ${escHtml(d.LicenseNumber)}</p>`;
             html += `<p style="margin: 5px 0;"><strong>DEA:</strong> ${escHtml(d.DEANumber || 'N/A')}</p>`;
             html += `<p style="margin: 5px 0;"><strong>Especialidad:</strong> ${escHtml(d.Specialty)}</p>`;
-            html += `<p style="margin: 5px 0;"><strong>Teléfono:</strong> ${escHtml(d.Phone || 'N/A')}</p>`;
+            html += `<p style="margin: 5px 0;"><strong>Tel ${escHtml(d.Phone || 'N/A')}</p>`;
             html += `<p style="margin: 5px 0;"><strong>Email:</strong> ${escHtml(d.Email || 'N/A')}</p>`;
             html += '</div>';
             
             // Statistics
             html += '<div style="background: #e3f2fd; padding: 20px; border-radius: 8px; margin-bottom: 20px;">';
-            html += '<h4 style="color: #1976d2; margin-top: 0;">📊 Estadísticas</h4>';
+            html += '<h4 style="color: #1976d2; margin-top: 0;"> Estad
             html += '<div style="display: grid; grid-template-columns: repeat(3, 1fr); gap: 15px;">';
             html += `<div style="text-align: center;"><div style="font-size: 24px; font-weight: bold; color: #1976d2;">${stats.TotalPrescriptions || 0}</div><div style="color: #666; font-size: 14px;">Recetas Totales</div></div>`;
             html += `<div style="text-align: center;"><div style="font-size: 24px; font-weight: bold; color: #1976d2;">${stats.ActivePrescriptions || 0}</div><div style="color: #666; font-size: 14px;">Recetas Activas</div></div>`;
             html += `<div style="text-align: center;"><div style="font-size: 24px; font-weight: bold; color: #1976d2;">${stats.UniquePatients || 0}</div><div style="color: #666; font-size: 14px;">Pacientes</div></div>`;
             html += '</div>';
             if (stats.LastPrescriptionDate) {
-                html += `<p style="margin: 15px 0 0 0; text-align: center; color: #666;">Última receta: ${fmtDate(stats.LastPrescriptionDate)}</p>`;
+                html += `<p style="margin: 15px 0 0 0; text-align: center; color: #666;"> receta: ${fmtDate(stats.LastPrescriptionDate)}</p>`;
             }
             html += '</div>';
             
             // Insurance Partnerships
             html += '<div style="background: #d4edda; padding: 20px; border-radius: 8px; margin-bottom: 20px;">';
-            html += '<h4 style="color: #155724; margin-top: 0;">🏥 Seguros Vinculados ';
-            html += `<button onclick="window.addInsurancePartnership(${id})" class="btn btn-sm btn-success" style="float: right;">➕ Agregar</button>`;
+            html += '<h4 style="color: #155724; margin-top: 0;"> Seguros Vinculados ';
+            html += `<button onclick="window.addInsurancePartnership(${id})" class="btn btn-sm btn-success" style="float: right;"> Agregar</button>`;
             html += '</h4>';
             
             if (insurance.length > 0) {
@@ -403,9 +402,9 @@
                 html += '<tbody>';
                 insurance.forEach(ins => {
                     const effectiveFrom = ins.EffectiveFrom ? fmtDate(ins.EffectiveFrom) : '-';
-                    const effectiveTo = ins.EffectiveTo ? fmtDate(ins.EffectiveTo) : '∞';
+                    const effectiveTo = ins.EffectiveTo ? fmtDate(ins.EffectiveTo) : ';
                     const vigencia = `${effectiveFrom} - ${effectiveTo}`;
-                    const status = ins.IsActive ? '✅ Activo' : '❌ Inactivo';
+                    const status = ins.IsActive ? ' Activo' : ' Inactivo';
                     
                     html += `<tr>`;
                     html += `<td><strong>${escHtml(ins.InsuranceName)}</strong></td>`;
@@ -414,7 +413,7 @@
                     html += `<td><span class="badge badge-success">${ins.DiscountPercentage || 0}%</span></td>`;
                     html += `<td>`;
                     if (ins.IsActive) {
-                        html += `<button class="btn btn-xs btn-danger" onclick="window.removeInsurancePartnership(${ins.PrescriberInsuranceID}, ${id})">🗑️</button>`;
+                        html += `<button class="btn btn-xs btn-danger" onclick="window.removeInsurancePartnership(${ins.PrescriberInsuranceID}, ${id})">
                     }
                     html += `</td>`;
                     html += `</tr>`;
@@ -428,7 +427,7 @@
             // Action Buttons
             html += '<div style="text-align: center; margin-top: 30px;">';
             html += '<button onclick="window.closeModal()" class="btn btn-secondary" style="margin: 5px;">Cerrar</button>';
-            html += `<button onclick="window.closeModal(); window.editDoctor(${id})" class="btn btn-primary" style="margin: 5px;">✏️ Editar</button>`;
+            html += `<button onclick="window.closeModal(); window.editDoctor(${id})" class="btn btn-primary" style="margin: 5px;"> Editar</button>`;
             html += '</div>';
             
             html += '</div>';
@@ -453,12 +452,12 @@
         html += '<div style="display: grid; grid-template-columns: 1fr 1fr; gap: 15px;">';
         
         html += '<div class="form-group">';
-        html += '<label>Número de Licencia *</label>';
+        html += '<label>N de Licencia *</label>';
         html += '<input type="text" id="doctorLicense" class="form-control" required>';
         html += '</div>';
         
         html += '<div class="form-group">';
-        html += '<label>Número DEA</label>';
+        html += '<label>N DEA</label>';
         html += '<input type="text" id="doctorDEA" class="form-control">';
         html += '</div>';
         
@@ -471,11 +470,11 @@
         html += '<option value="General Medicine">Medicina General</option>';
         html += '<option value="Family Medicine">Medicina Familiar</option>';
         html += '<option value="Internal Medicine">Medicina Interna</option>';
-        html += '<option value="Cardiology">Cardiología</option>';
-        html += '<option value="Endocrinology">Endocrinología</option>';
-        html += '<option value="Pulmonology">Neumología</option>';
-        html += '<option value="Dermatology">Dermatología</option>';
-        html += '<option value="Pediatrics">Pediatría</option>';
+        html += '<option value="Cardiology">Cardiolog
+        html += '<option value="Endocrinology">Endocrinolog
+        html += '<option value="Pulmonology">Neumolog
+        html += '<option value="Dermatology">Dermatolog
+        html += '<option value="Pediatrics">Pediatr
         html += '<option value="Other">Otra</option>';
         html += '</select>';
         html += '</div>';
@@ -483,7 +482,7 @@
         html += '<div style="display: grid; grid-template-columns: 1fr 1fr; gap: 15px;">';
         
         html += '<div class="form-group">';
-        html += '<label>Teléfono</label>';
+        html += '<label>Tel
         html += '<input type="tel" id="doctorPhone" class="form-control">';
         html += '</div>';
         
@@ -496,7 +495,7 @@
         
         html += '<div style="text-align: center; margin-top: 30px;">';
         html += '<button type="button" onclick="window.closeModal()" class="btn btn-secondary" style="margin: 5px;">Cancelar</button>';
-        html += '<button type="submit" class="btn btn-success" style="margin: 5px;">➕ Crear Doctor</button>';
+        html += '<button type="submit" class="btn btn-success" style="margin: 5px;"> Crear Doctor</button>';
         html += '</div>';
         
         html += '</form>';
@@ -534,12 +533,12 @@
             html += '<div style="display: grid; grid-template-columns: 1fr 1fr; gap: 15px;">';
             
             html += '<div class="form-group">';
-            html += '<label>Número de Licencia *</label>';
+            html += '<label>N de Licencia *</label>';
             html += `<input type="text" id="doctorLicense" class="form-control" value="${escHtml(d.LicenseNumber)}" required>`;
             html += '</div>';
             
             html += '<div class="form-group">';
-            html += '<label>Número DEA</label>';
+            html += '<label>N DEA</label>';
             html += `<input type="text" id="doctorDEA" class="form-control" value="${escHtml(d.DEANumber || '')}">`;
             html += '</div>';
             
@@ -551,11 +550,11 @@
             html += `<option value="General Medicine" ${d.Specialty === 'General Medicine' ? 'selected' : ''}>Medicina General</option>`;
             html += `<option value="Family Medicine" ${d.Specialty === 'Family Medicine' ? 'selected' : ''}>Medicina Familiar</option>`;
             html += `<option value="Internal Medicine" ${d.Specialty === 'Internal Medicine' ? 'selected' : ''}>Medicina Interna</option>`;
-            html += `<option value="Cardiology" ${d.Specialty === 'Cardiology' ? 'selected' : ''}>Cardiología</option>`;
-            html += `<option value="Endocrinology" ${d.Specialty === 'Endocrinology' ? 'selected' : ''}>Endocrinología</option>`;
-            html += `<option value="Pulmonology" ${d.Specialty === 'Pulmonology' ? 'selected' : ''}>Neumología</option>`;
-            html += `<option value="Dermatology" ${d.Specialty === 'Dermatology' ? 'selected' : ''}>Dermatología</option>`;
-            html += `<option value="Pediatrics" ${d.Specialty === 'Pediatrics' ? 'selected' : ''}>Pediatría</option>`;
+            html += `<option value="Cardiology" ${d.Specialty === 'Cardiology' ? 'selected' : ''}>Cardiolog
+            html += `<option value="Endocrinology" ${d.Specialty === 'Endocrinology' ? 'selected' : ''}>Endocrinolog
+            html += `<option value="Pulmonology" ${d.Specialty === 'Pulmonology' ? 'selected' : ''}>Neumolog
+            html += `<option value="Dermatology" ${d.Specialty === 'Dermatology' ? 'selected' : ''}>Dermatolog
+            html += `<option value="Pediatrics" ${d.Specialty === 'Pediatrics' ? 'selected' : ''}>Pediatr
             html += `<option value="Other" ${d.Specialty === 'Other' ? 'selected' : ''}>Otra</option>`;
             html += '</select>';
             html += '</div>';
@@ -563,7 +562,7 @@
             html += '<div style="display: grid; grid-template-columns: 1fr 1fr; gap: 15px;">';
             
             html += '<div class="form-group">';
-            html += '<label>Teléfono</label>';
+            html += '<label>Tel
             html += `<input type="tel" id="doctorPhone" class="form-control" value="${escHtml(d.Phone || '')}">`;
             html += '</div>';
             
@@ -576,7 +575,7 @@
             
             html += '<div style="text-align: center; margin-top: 30px;">';
             html += '<button type="button" onclick="window.closeModal()" class="btn btn-secondary" style="margin: 5px;">Cancelar</button>';
-            html += '<button type="submit" class="btn btn-primary" style="margin: 5px;">💾 Guardar Cambios</button>';
+            html += '<button type="submit" class="btn btn-primary" style="margin: 5px;"> Guardar Cambios</button>';
             html += '</div>';
             
             html += '</form>';
@@ -615,23 +614,23 @@
             
             if (!res.ok) {
                 const errorData = await res.json();
-                alert('❌ Error: ' + (errorData.message || 'No se pudo guardar'));
+                alert(' Error: ' + (errorData.message || 'No se pudo guardar'));
                 return;
             }
             
             const result = await res.json();
             
             if (result.success) {
-                alert(id ? '✅ Doctor actualizado exitosamente' : '✅ Doctor creado exitosamente');
+                alert(id ? ' Doctor actualizado exitosamente' : ' Doctor creado exitosamente');
                 window.closeModal();
                 await loadDoctors();
                 updateStats();
             } else {
-                alert('❌ Error: ' + (result.message || ''));
+                alert(' Error: ' + (result.message || ''));
             }
         } catch (error) {
             console.error('Error:', error);
-            alert('❌ Error al guardar doctor');
+            alert(' Error al guardar doctor');
         }
     };
     
@@ -640,7 +639,7 @@
         const doctor = allDoctors.find(d => d.PrescriberID === id);
         if (!doctor) return;
         
-        if (!confirm(`¿Está seguro que desea desactivar a ${doctor.FullName}?\n\nEsta acción marcará al doctor como inactivo pero preservará sus recetas existentes.`)) {
+        if (!confirm(`t seguro que desea desactivar a ${doctor.FullName}?\n\nEsta acci marcar al doctor como inactivo pero preservar sus recetas existentes.`)) {
             return;
         }
         
@@ -651,22 +650,22 @@
             });
             
             if (!res.ok) {
-                alert('❌ Error al desactivar doctor');
+                alert(' Error al desactivar doctor');
                 return;
             }
             
             const result = await res.json();
             
             if (result.success) {
-                alert('✅ Doctor desactivado exitosamente');
+                alert(' Doctor desactivado exitosamente');
                 await loadDoctors();
                 updateStats();
             } else {
-                alert('❌ Error: ' + (result.message || ''));
+                alert(' Error: ' + (result.message || ''));
             }
         } catch (error) {
             console.error('Error:', error);
-            alert('❌ Error al desactivar doctor');
+            alert(' Error al desactivar doctor');
         }
     };
     
@@ -676,7 +675,7 @@
     
     window.addInsurancePartnership = function(doctorId) {
         if (insuranceProviders.length === 0) {
-            alert('⚠️ No hay proveedores de seguro disponibles');
+            alert('  No hay proveedores de seguro disponibles');
             return;
         }
         
@@ -693,7 +692,7 @@
         html += '</div>';
         
         html += '<div class="form-group">';
-        html += '<label>Número de Contrato</label>';
+        html += '<label>N de Contrato</label>';
         html += '<input type="text" id="contractNumber" class="form-control">';
         html += '</div>';
         
@@ -713,7 +712,7 @@
         
         html += '<div style="text-align: center; margin-top: 30px;">';
         html += '<button type="button" onclick="window.closeModal()" class="btn btn-secondary" style="margin: 5px;">Cancelar</button>';
-        html += '<button type="submit" class="btn btn-success" style="margin: 5px;">➕ Agregar Seguro</button>';
+        html += '<button type="submit" class="btn btn-success" style="margin: 5px;"> Agregar Seguro</button>';
         html += '</div>';
         
         html += '</form>';
@@ -741,29 +740,29 @@
             
             if (!res.ok) {
                 const errorData = await res.json();
-                alert('❌ Error: ' + (errorData.message || 'No se pudo agregar'));
+                alert(' Error: ' + (errorData.message || 'No se pudo agregar'));
                 return;
             }
             
             const result = await res.json();
             
             if (result.success) {
-                alert('✅ Seguro agregado exitosamente');
+                alert(' Seguro agregado exitosamente');
                 window.closeModal();
                 window.viewDoctor(doctorId);
                 await loadDoctors();
                 updateStats();
             } else {
-                alert('❌ Error: ' + (result.message || ''));
+                alert(' Error: ' + (result.message || ''));
             }
         } catch (error) {
             console.error('Error:', error);
-            alert('❌ Error al agregar seguro');
+            alert(' Error al agregar seguro');
         }
     };
     
     window.removeInsurancePartnership = async function(partnershipId, doctorId) {
-        if (!confirm('¿Está seguro que desea eliminar esta asociación con el seguro?')) {
+        if (!confirm('t seguro que desea eliminar esta asociaci con el seguro?')) {
             return;
         }
         
@@ -774,23 +773,23 @@
             });
             
             if (!res.ok) {
-                alert('❌ Error al eliminar seguro');
+                alert(' Error al eliminar seguro');
                 return;
             }
             
             const result = await res.json();
             
             if (result.success) {
-                alert('✅ Seguro eliminado exitosamente');
+                alert(' Seguro eliminado exitosamente');
                 window.viewDoctor(doctorId);
                 await loadDoctors();
                 updateStats();
             } else {
-                alert('❌ Error: ' + (result.message || ''));
+                alert(' Error: ' + (result.message || ''));
             }
         } catch (error) {
             console.error('Error:', error);
-            alert('❌ Error al eliminar seguro');
+            alert(' Error al eliminar seguro');
         }
     };
     
@@ -814,25 +813,25 @@
         html += '</div>';
         
         html += '<div class="form-group">';
-        html += '<label>Monto Mínimo de Receta (₡)</label>';
+        html += '<label>Monto M de Receta (</label>';
         html += `<input type="number" id="minimumAmount" class="form-control" min="0" step="0.01" value="${minAmount || 0}">`;
-        html += '<small style="color: #666;">Monto mínimo para aplicar el descuento</small>';
+        html += '<small style="color: #666;">Monto m para aplicar el descuento</small>';
         html += '</div>';
         
         html += '<div class="form-group">';
-        html += '<label>Descuento Máximo (₡)</label>';
+        html += '<label>Descuento M (</label>';
         html += `<input type="number" id="maximumDiscount" class="form-control" min="0" step="0.01" value="${maxDiscount || ''}">`;
-        html += '<small style="color: #666;">Límite máximo del descuento (dejar vacío para sin límite)</small>';
+        html += '<small style="color: #666;">L m del descuento (dejar vac para sin l
         html += '</div>';
         
         html += '<div class="form-group">';
-        html += '<label>Descripción</label>';
+        html += '<label>Descripci
         html += '<textarea id="discountDescription" class="form-control" rows="2"></textarea>';
         html += '</div>';
         
         html += '<div style="text-align: center; margin-top: 30px;">';
         html += '<button type="button" onclick="window.closeModal()" class="btn btn-secondary" style="margin: 5px;">Cancelar</button>';
-        html += '<button type="submit" class="btn btn-primary" style="margin: 5px;">💾 Guardar Tarifa</button>';
+        html += '<button type="submit" class="btn btn-primary" style="margin: 5px;"> Guardar Tarifa</button>';
         html += '</div>';
         
         html += '</form>';
@@ -851,7 +850,7 @@
         };
         
         if (discountData.discountPercentage < 0 || discountData.discountPercentage > 100) {
-            alert('❌ El porcentaje debe estar entre 0 y 100');
+            alert(' El porcentaje debe estar entre 0 y 100');
             return;
         }
         
@@ -864,23 +863,23 @@
             });
             
             if (!res.ok) {
-                alert('❌ Error al actualizar tarifa');
+                alert(' Error al actualizar tarifa');
                 return;
             }
             
             const result = await res.json();
             
             if (result.success) {
-                alert('✅ Tarifa actualizada exitosamente');
+                alert(' Tarifa actualizada exitosamente');
                 window.closeModal();
                 await loadDiscountRates();
                 updateStats();
             } else {
-                alert('❌ Error: ' + (result.message || ''));
+                alert(' Error: ' + (result.message || ''));
             }
         } catch (error) {
             console.error('Error:', error);
-            alert('❌ Error al actualizar tarifa');
+            alert(' Error al actualizar tarifa');
         }
     };
     
@@ -952,6 +951,6 @@
         }).format(amount);
     }
     
-    console.log('✅ Doctors module loaded successfully');
+    console.log(' Doctors module loaded successfully');
     
 })();

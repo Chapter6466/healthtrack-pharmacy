@@ -172,10 +172,10 @@ function getStockStatusClass(status) {
 // Get stock status text
 function getStockStatusText(status) {
     const statusMap = {
-        'CRITICAL': '🔴 Crítico',
-        'LOW': '🟡 Bajo',
-        'NORMAL': '🟢 Normal',
-        'OVERSTOCK': '🔵 Exceso'
+        'CRITICAL': ' Cr
+        'LOW': ' Bajo',
+        'NORMAL': ' Normal',
+        'OVERSTOCK': ' Exceso'
     };
     return statusMap[status] || status;
 }
