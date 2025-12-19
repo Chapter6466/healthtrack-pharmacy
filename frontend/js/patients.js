@@ -1775,8 +1775,8 @@ console.log(' Patients module loaded - Part 2/2 (CRUD operations)');
         modal.innerHTML = `
             <div class="modal-content" style="max-width: ${width}; width: 90%;">
                 <div class="modal-header">
-                    <h3>${title}</h3>
-                    <button class="btn-close" onclick="window.closeModal()">&times;</button>
+                    <h3 id="modalTitle">${title}</h3>
+                    <button class="btn-close" onclick="window.closeModal()" aria-label="Cerrar modal">&times;</button>
                 </div>
                 <div class="modal-body">
                     ${bodyHtml}
@@ -1786,6 +1786,27 @@ console.log(' Patients module loaded - Part 2/2 (CRUD operations)');
         
         modal.style.display = 'flex';
         
+        const focusable = modal.querySelectorAll('button, [href], input, select, textarea, [tabindex]:not([tabindex="-1"])');
+        const first = focusable[0];
+        const last = focusable[focusable.length - 1];
+        if (first) first.focus();
+
+        function trap(e) {
+            if (e.key === 'Escape') {
+                window.closeModal();
+            }
+            if (e.key === 'Tab' && focusable.length > 0) {
+                if (e.shiftKey && document.activeElement === first) {
+                    e.preventDefault();
+                    last.focus();
+                } else if (!e.shiftKey && document.activeElement === last) {
+                    e.preventDefault();
+                    first.focus();
+                }
+            }
+        }
+        modal.onkeydown = trap;
+
         modal.onclick = function(event) {
             if (event.target === modal) {
                 window.closeModal();

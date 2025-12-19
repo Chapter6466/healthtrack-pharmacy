@@ -772,12 +772,15 @@ window.processRefund = async function(invoiceId) {
 // ============================================
 
 function showModal(title, bodyHtml, width = '600px') {
+    const modalContainer = document.getElementById('modalContainer');
+    if (!modalContainer) return;
+
     const modalHtml = `
-        <div class="modal" id="dynamicModal" style="display: flex;">
+        <div class="modal" id="dynamicModal" style="display: flex;" role="dialog" aria-modal="true">
             <div class="modal-content" style="width: ${width}; max-width: 95%;">
                 <div class="modal-header">
-                    <h3>${escHtml(title)}</h3>
-                    <button class="btn-close" onclick="closeModal()" style="background: none; border: none; font-size: 28px; cursor: pointer; color: #666;">&times;</button>
+                    <h3 id="modalTitle">${escHtml(title)}</h3>
+                    <button class="btn-close" onclick="closeModal()" aria-label="Cerrar modal" style="background: none; border: none; font-size: 28px; cursor: pointer; color: #666;">&times;</button>
                 </div>
                 <div class="modal-body">
                     ${bodyHtml}
@@ -786,17 +789,33 @@ function showModal(title, bodyHtml, width = '600px') {
         </div>
     `;
 
-    document.getElementById('modalContainer').innerHTML = modalHtml;
+    modalContainer.innerHTML = modalHtml;
+    const modal = document.getElementById('dynamicModal');
+    const focusable = modal.querySelectorAll('button, [href], input, select, textarea, [tabindex]:not([tabindex="-1"])');
+    const first = focusable[0];
+    const last = focusable[focusable.length - 1];
 
-    document.getElementById('dynamicModal').addEventListener('click', function(e) {
-        if (e.target === this) closeModal();
-    });
+    if (first) first.focus();
 
-    document.addEventListener('keydown', function escHandler(e) {
+    function trap(e) {
         if (e.key === 'Escape') {
             closeModal();
-            document.removeEventListener('keydown', escHandler);
         }
+        if (e.key === 'Tab') {
+            if (e.shiftKey && document.activeElement === first) {
+                e.preventDefault();
+                last.focus();
+            } else if (!e.shiftKey && document.activeElement === last) {
+                e.preventDefault();
+                first.focus();
+            }
+        }
+    }
+
+    modal.addEventListener('keydown', trap);
+
+    modal.addEventListener('click', function(e) {
+        if (e.target === modal) closeModal();
     });
 }
 
