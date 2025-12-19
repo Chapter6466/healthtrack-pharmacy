@@ -107,7 +107,40 @@ async function loadInventory() {
         return;
     }
     
-    container.innerHTML = '<div class="spinner"></div>';
+    const skeletonRows = Array.from({ length: 6 }).map(() => `
+        <tr>
+            <td><span class="skeleton-line w-80"></span></td>
+            <td><span class="skeleton-line w-60"></span></td>
+            <td><span class="skeleton-line w-60"></span></td>
+            <td><span class="skeleton-line w-40"></span></td>
+            <td><span class="skeleton-line w-40"></span></td>
+            <td><span class="skeleton-line w-40"></span></td>
+            <td><span class="skeleton-line w-60"></span></td>
+            <td><span class="skeleton-line w-60"></span></td>
+            <td><span class="skeleton-line w-60"></span></td>
+        </tr>
+    `).join('');
+
+    container.innerHTML = `
+        <div class="table-wrapper">
+        <table class="table table-sticky">
+            <thead>
+                <tr>
+                    <th>Producto</th>
+                    <th>Categoria</th>
+                    <th>Lote</th>
+                    <th>Stock Actual</th>
+                    <th>Min/Max</th>
+                    <th>Precio</th>
+                    <th>Estado</th>
+                    <th>Vencimiento</th>
+                    <th>Acciones</th>
+                </tr>
+            </thead>
+            <tbody>${skeletonRows}</tbody>
+        </table>
+        </div>
+    `;
     
     try {
         const lowStockOnly = document.getElementById('lowStockOnly')?.checked || false;
@@ -129,6 +162,7 @@ async function loadInventory() {
             console.log(' Inventory loaded:', inventoryData.length, 'items');
             updateStatistics();
             displayInventory();
+            renderFilterChips();
         } else {
             console.warn('No inventory data:', data);
             container.innerHTML = '<p class="text-muted text-center" style="padding: 40px;">No hay datos de inventario disponibles</p>';
@@ -146,21 +180,71 @@ function filterInventory() {
         const warehouseFilter = document.getElementById('warehouseFilter')?.value || '';
         const productFilter = document.getElementById('productFilter')?.value.toLowerCase() || '';
         const statusFilter = document.getElementById('stockStatusFilter')?.value || '';
-        
+        const lowStockOnly = document.getElementById('lowStockOnly')?.checked || false;
         filteredData = inventoryData.filter(item => {
             let matches = true;
             
             if (warehouseFilter && item.WarehouseID != warehouseFilter) matches = false;
             if (productFilter && !item.ProductName.toLowerCase().includes(productFilter)) matches = false;
             if (statusFilter && item.StockStatus !== statusFilter) matches = false;
+            if (lowStockOnly && !(item.StockStatus === 'CRITICAL' || item.StockStatus === 'LOW')) matches = false;
             
             return matches;
         });
         
         displayInventory();
+        renderFilterChips();
     } catch (error) {
         console.error('Filter error:', error);
     }
+}
+
+function renderFilterChips() {
+    const chipsContainer = document.getElementById('filterChips');
+    if (!chipsContainer) return;
+
+    const chips = [];
+    const warehouseSelect = document.getElementById('warehouseFilter');
+    const warehouseText = warehouseSelect?.selectedOptions?.[0]?.text || '';
+    if (warehouseSelect && warehouseSelect.value) {
+        chips.push(`<span class="filter-chip"><i class="fa-solid fa-warehouse"></i> ${warehouseText}</span>`);
+    }
+
+    const productText = document.getElementById('productFilter')?.value || '';
+    if (productText) {
+        chips.push(`<span class="filter-chip"><i class="fa-solid fa-magnifying-glass"></i> ${productText}</span>`);
+    }
+
+    const statusSelect = document.getElementById('stockStatusFilter');
+    const statusText = statusSelect?.selectedOptions?.[0]?.text || '';
+    if (statusSelect && statusSelect.value) {
+        chips.push(`<span class="filter-chip"><i class="fa-solid fa-circle"></i> ${statusText}</span>`);
+    }
+
+    const lowStockOnly = document.getElementById('lowStockOnly')?.checked || false;
+    if (lowStockOnly) {
+        chips.push(`<span class="filter-chip"><i class="fa-solid fa-triangle-exclamation"></i> Solo stock bajo</span>`);
+    }
+
+    chipsContainer.innerHTML = chips.length
+        ? chips.join('') + `<button class="filter-clear" onclick="clearInventoryFilters()">Limpiar filtros</button>`
+        : '<span class="text-muted" style="font-size:12px;">Sin filtros activos</span>';
+}
+
+function clearInventoryFilters() {
+    const warehouseSelect = document.getElementById('warehouseFilter');
+    const productFilter = document.getElementById('productFilter');
+    const statusSelect = document.getElementById('stockStatusFilter');
+    const lowStockOnly = document.getElementById('lowStockOnly');
+
+    if (warehouseSelect) warehouseSelect.value = '';
+    if (productFilter) productFilter.value = '';
+    if (statusSelect) statusSelect.value = '';
+    if (lowStockOnly) lowStockOnly.checked = false;
+
+    filteredData = [...inventoryData];
+    displayInventory();
+    renderFilterChips();
 }
 
 // Update statistics
@@ -203,7 +287,8 @@ function displayInventory() {
         }
         
         container.innerHTML = `
-            <table class="table">
+            <div class="table-wrapper">
+            <table class="table table-sticky">
                 <thead>
                     <tr>
                         <th>Producto</th>
@@ -246,6 +331,7 @@ function displayInventory() {
                     `).join('')}
                 </tbody>
             </table>
+            </div>
         `;
     } catch (error) {
         console.error('Display error:', error);

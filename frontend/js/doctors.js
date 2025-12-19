@@ -135,6 +135,7 @@
         }
         
         displayDoctors();
+        renderDoctorFilterChips();
     }
     
     function setupAddDoctorButton() {
@@ -157,6 +158,10 @@
     async function loadDoctors() {
         try {
             console.log(' Loading doctors...');
+            const resultsDiv = document.getElementById('doctorsResults');
+            if (resultsDiv) {
+                resultsDiv.innerHTML = buildDoctorsSkeleton();
+            }
             const response = await fetch('/api/doctors', {
                 credentials: 'include'
             });
@@ -178,6 +183,7 @@
                 doctorsData = [...allDoctors];
                 console.log(' Loaded', allDoctors.length, 'doctors');
                 displayDoctors();
+                renderDoctorFilterChips();
             } else {
                 allDoctors = [];
                 doctorsData = [];
@@ -270,7 +276,7 @@
             return;
         }
         
-        let html = '<table class="table table-sticky" style="width: 100%; background: white; border-radius: 8px; overflow: hidden;">';
+        let html = '<div class="table-wrapper"><table class="table table-sticky" style="width: 100%; background: white; border-radius: 8px; overflow: hidden;">';
         html += '<thead><tr>';
         html += '<th>Nombre</th>';
         html += '<th>Licencia</th>';
@@ -299,7 +305,7 @@
             html += '</tr>';
         });
         
-        html += '</tbody></table>';
+        html += '</tbody></table></div>';
         resultsDiv.innerHTML = html;
     }
     
@@ -397,7 +403,7 @@
             html += '</h4>';
             
             if (insurance.length > 0) {
-                html += '<table class="table table-sticky" style="background: white; margin-top: 10px;">';
+                html += '<div class="table-wrapper"><table class="table table-sticky" style="background: white; margin-top: 10px;">';
                 html += '<thead><tr><th>Seguro</th><th>Contrato</th><th>Vigencia</th><th>Descuento</th><th>Acciones</th></tr></thead>';
                 html += '<tbody>';
                 insurance.forEach(ins => {
@@ -420,7 +426,7 @@
                     html += `</td>`;
                     html += `</tr>`;
                 });
-                html += '</tbody></table>';
+                html += '</tbody></table></div>';
             } else {
                 html += '<p style="color: #666;">No tiene seguros vinculados</p>';
             }
@@ -957,3 +963,64 @@
     console.log(' Doctors module loaded successfully');
     
 })();
+
+
+    function buildDoctorsSkeleton() {
+        const rows = Array.from({ length: 5 }).map(() => `
+            <tr>
+                <td><span class="skeleton-line w-80"></span></td>
+                <td><span class="skeleton-line w-60"></span></td>
+                <td><span class="skeleton-line w-60"></span></td>
+                <td><span class="skeleton-line w-60"></span></td>
+                <td><span class="skeleton-line w-60"></span></td>
+                <td><span class="skeleton-line w-40"></span></td>
+                <td><span class="skeleton-line w-40"></span></td>
+                <td><span class="skeleton-line w-40"></span></td>
+            </tr>
+        `).join('');
+
+        return `
+            <div class="table-wrapper"><table class="table table-sticky" style="width: 100%; background: white; border-radius: 8px; overflow: hidden;">
+                <thead><tr>
+                    <th>Nombre</th>
+                    <th>Licencia</th>
+                    <th>Especialidad</th>
+                    <th>Telefono</th>
+                    <th>Email</th>
+                    <th>Seguros</th>
+                    <th>Recetas</th>
+                    <th>Acciones</th>
+                </tr></thead>
+                <tbody>${rows}</tbody>
+            </table></div>
+        `;
+    }
+
+    function renderDoctorFilterChips() {
+        const chipsContainer = document.getElementById('doctorFilterChips');
+        if (!chipsContainer) return;
+
+        const chips = [];
+        const name = document.getElementById('searchName')?.value.trim();
+        if (name) chips.push(`<span class="filter-chip"><i class="fa-solid fa-user-doctor"></i> ${name}</span>`);
+
+        const specialtySelect = document.getElementById('searchSpecialty');
+        const specialtyText = specialtySelect?.selectedOptions?.[0]?.text || '';
+        if (specialtySelect && specialtySelect.value) {
+            chips.push(`<span class="filter-chip"><i class="fa-solid fa-stethoscope"></i> ${specialtyText}</span>`);
+        }
+
+        chipsContainer.innerHTML = chips.length
+            ? chips.join('') + `<button class="filter-clear" onclick="clearDoctorFilters()">Limpiar filtros</button>`
+            : '<span class="text-muted" style="font-size:12px;">Sin filtros activos</span>';
+    }
+
+    window.clearDoctorFilters = function() {
+        const nameInput = document.getElementById('searchName');
+        const specialtySelect = document.getElementById('searchSpecialty');
+        if (nameInput) nameInput.value = '';
+        if (specialtySelect) specialtySelect.value = '';
+        doctorsData = [...allDoctors];
+        displayDoctors();
+        renderDoctorFilterChips();
+    };

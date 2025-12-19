@@ -127,9 +127,26 @@ async function loadInvoices() {
     const endDate = document.getElementById('filterEndDate').value;
     const status = document.getElementById('filterStatus').value;
 
-    // Show loading
-    document.getElementById('loadingSpinner').style.display = 'block';
-    document.getElementById('invoicesTableContainer').style.display = 'none';
+    // Show loading skeleton
+    const tbody = document.getElementById('invoicesTableBody');
+    if (tbody) {
+        const skeletonRows = Array.from({ length: 6 }).map(() => `
+            <tr>
+                <td><span class="skeleton-line w-80"></span></td>
+                <td><span class="skeleton-line w-60"></span></td>
+                <td><span class="skeleton-line w-60"></span></td>
+                <td><span class="skeleton-line w-60"></span></td>
+                <td><span class="skeleton-line w-40"></span></td>
+                <td><span class="skeleton-line w-40"></span></td>
+                <td><span class="skeleton-line w-40"></span></td>
+                <td><span class="skeleton-line w-40"></span></td>
+                <td><span class="skeleton-line w-40"></span></td>
+            </tr>
+        `).join('');
+        tbody.innerHTML = skeletonRows;
+    }
+    document.getElementById('loadingSpinner').style.display = 'none';
+    document.getElementById('invoicesTableContainer').style.display = 'block';
 
     try {
         let url = '/api/invoices?';
@@ -162,6 +179,7 @@ async function loadInvoices() {
             allInvoices = [];
             displayInvoices(allInvoices);
         }
+        renderInvoiceFilterChips();
     } catch (error) {
         console.error('Error loading invoices:', error);
         alert('Error al cargar facturas: ' + error.message);
@@ -227,6 +245,46 @@ function getStatusBadge(invoice) {
     }
 
     return '<span class="badge badge-success">Activa</span>';
+}
+
+function renderInvoiceFilterChips() {
+    const chipsContainer = document.getElementById('invoiceFilterChips');
+    if (!chipsContainer) return;
+
+    const chips = [];
+    const invoiceId = document.getElementById('searchInvoiceId')?.value.trim();
+    if (invoiceId) {
+        chips.push(`<span class="filter-chip"><i class="fa-solid fa-hashtag"></i> ${invoiceId}</span>`);
+    }
+
+    const startDate = document.getElementById('filterStartDate')?.value;
+    if (startDate) {
+        chips.push(`<span class="filter-chip"><i class="fa-solid fa-calendar-day"></i> Desde ${startDate}</span>`);
+    }
+
+    const endDate = document.getElementById('filterEndDate')?.value;
+    if (endDate) {
+        chips.push(`<span class="filter-chip"><i class="fa-solid fa-calendar-day"></i> Hasta ${endDate}</span>`);
+    }
+
+    const statusSelect = document.getElementById('filterStatus');
+    const statusText = statusSelect?.selectedOptions?.[0]?.text || '';
+    if (statusSelect && statusSelect.value && statusSelect.value !== 'All') {
+        chips.push(`<span class="filter-chip"><i class="fa-solid fa-circle"></i> ${statusText}</span>`);
+    }
+
+    chipsContainer.innerHTML = chips.length ? chips.join('') : '<span class="text-muted" style="font-size:12px;">Sin filtros activos</span>';
+    if (chips.length) {
+        chipsContainer.innerHTML += `<button class="filter-clear" onclick="clearInvoiceFilters()">Limpiar filtros</button>`;
+    }
+}
+
+function clearInvoiceFilters() {
+    document.getElementById('searchInvoiceId').value = '';
+    document.getElementById('filterStartDate').value = '';
+    document.getElementById('filterEndDate').value = '';
+    document.getElementById('filterStatus').value = 'All';
+    loadInvoices();
 }
 
 // ============================================
@@ -317,8 +375,8 @@ function showInvoiceDetailsModal(invoice, items, refunds) {
         </div>
 
         <h4>Items de la Factura</h4>
-        <div style="overflow-x: auto;">
-            <table class="table table-sm">
+        <div class="table-wrapper">
+            <table class="table table-sm table-sticky">
                 <thead>
                     <tr>
                         <th>Producto</th>

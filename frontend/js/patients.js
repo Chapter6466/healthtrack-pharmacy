@@ -388,6 +388,10 @@
     async function loadPatients() {
         try {
             console.log(' Loading patients...');
+            const resultsDiv = document.getElementById('patientsResults');
+            if (resultsDiv) {
+                resultsDiv.innerHTML = buildPatientsSkeleton();
+            }
             const response = await fetch('/api/patients', {
                 credentials: 'include'
             });
@@ -411,6 +415,7 @@
                 patientsData = [...allPatients];
                 console.log(' Loaded', allPatients.length, 'patients');
                 displayPatients();
+                renderPatientFilterChips();
             } else {
                 console.error(' Invalid response structure:', data);
                 allPatients = [];
@@ -461,10 +466,11 @@
         
         if (patientsData.length === 0) {
             resultsDiv.innerHTML = '<p style="text-align: center; color: #666; padding: 40px;">No se encontraron pacientes</p>';
+            renderPatientFilterChips();
             return;
         }
         
-        let html = '<table class="table table-sticky" style="width: 100%; background: white; border-radius: 8px; overflow: hidden;">';
+        let html = '<div class="table-wrapper"><table class="table table-sticky" style="width: 100%; background: white; border-radius: 8px; overflow: hidden;">';
         html += '<thead><tr>';
         html += '<th>Nombre</th>';
         html += '<th>Documento</th>';
@@ -487,10 +493,11 @@
             html += '</tr>';
         });
         
-        html += '</tbody></table>';
+        html += '</tbody></table></div>';
         resultsDiv.innerHTML = html;
+        renderPatientFilterChips();
     }
-    
+
     // DISPLAY DEACTIVATED PATIENTS (NEW)
     function displayDeactivatedPatients() {
         const resultsDiv = document.getElementById('patientsResults');
@@ -501,12 +508,13 @@
         
         if (deactivatedPatients.length === 0) {
             resultsDiv.innerHTML = '<div style="text-align: center; padding: 40px; background: white; border-radius: 8px;"><p style="color: #666; font-size: 16px;"> No hay pacientes desactivados</p></div>';
+            renderPatientFilterChips();
             return;
         }
         
         let html = '<div style="background: white; border-radius: 8px; padding: 20px;">';
         html += '<h3 style="color: #d9534f; margin-bottom: 20px;"> Pacientes Desactivados</h3>';
-        html += '<table class="table table-sticky">';
+        html += '<div class="table-wrapper"><table class="table table-sticky">';
         html += '<thead><tr>';
         html += '<th>Nombre</th>';
         html += '<th>Documento</th>';
@@ -523,16 +531,68 @@
             html += `<td>${fmtDateTime(p.DeactivatedAt)}</td>`;
             html += `<td>${escHtml(p.DeactivatedByName || 'N/A')}</td>`;
             html += `<td style="max-width: 300px;">${escHtml(p.DeactivationReason || 'Sin razon')}</td>`;
-            html += `<td>`;
-            html += `<button class="btn btn-sm btn-success" onclick="window.reactivatePat(${p.PatientID})" title="Reactivar">Reactivar</button>`;
+            html += `<td class="action-cell">`;
+            html += `<button class="btn btn-sm btn-success btn-icon" onclick="window.reactivatePat(${p.PatientID})" title="Reactivar" aria-label="Reactivar"><i class="fa-solid fa-circle-check"></i></button>`;
             html += `</td>`;
             html += '</tr>';
         });
         
-        html += '</tbody></table>';
+        html += '</tbody></table></div>';
         html += '</div>';
         resultsDiv.innerHTML = html;
+        renderPatientFilterChips();
     }
+
+    function buildPatientsSkeleton() {
+        const rows = Array.from({ length: 5 }).map(() => `
+            <tr>
+                <td><span class="skeleton-line w-80"></span></td>
+                <td><span class="skeleton-line w-60"></span></td>
+                <td><span class="skeleton-line w-60"></span></td>
+                <td><span class="skeleton-line w-60"></span></td>
+                <td><span class="skeleton-line w-40"></span></td>
+            </tr>
+        `).join('');
+
+        return `
+            <div class="table-wrapper"><table class="table table-sticky" style="width: 100%; background: white; border-radius: 8px; overflow: hidden;">
+                <thead><tr>
+                    <th>Nombre</th>
+                    <th>Documento</th>
+                    <th>Fecha Nac.</th>
+                    <th>Telefono</th>
+                    <th>Acciones</th>
+                </tr></thead>
+                <tbody>${rows}</tbody>
+            </table></div>
+        `;
+    }
+
+    function renderPatientFilterChips() {
+        const chipsContainer = document.getElementById('patientFilterChips');
+        if (!chipsContainer) return;
+
+        const chips = [];
+        const name = document.getElementById('patientNameSearch')?.value.trim();
+        if (name) chips.push(`<span class="filter-chip"><i class="fa-solid fa-user"></i> ${name}</span>`);
+
+        const doc = document.getElementById('patientDocSearch')?.value.trim();
+        if (doc) chips.push(`<span class="filter-chip"><i class="fa-solid fa-id-card"></i> ${doc}</span>`);
+
+        chipsContainer.innerHTML = chips.length
+            ? chips.join('') + `<button class="filter-clear" onclick="clearPatientFilters()">Limpiar filtros</button>`
+            : '<span class="text-muted" style="font-size:12px;">Sin filtros activos</span>';
+    }
+
+    window.clearPatientFilters = function() {
+        const nameInput = document.getElementById('patientNameSearch');
+        const docInput = document.getElementById('patientDocSearch');
+        if (nameInput) nameInput.value = '';
+        if (docInput) docInput.value = '';
+        patientsData = [...allPatients];
+        displayPatients();
+        renderPatientFilterChips();
+    };
     
     // ========================================
     // PATIENT CRUD OPERATIONS
@@ -589,7 +649,7 @@
             html += '</h4>';
 
             if (ins.length > 0) {
-                html += '<table class="table table-sticky" style="background: white; margin-top: 10px;">';
+                html += '<div class="table-wrapper"><table class="table table-sticky" style="background: white; margin-top: 10px;">';
                 html += '<thead><tr><th>Aseguradora</th><th>Poliza</th><th>Vigencia</th><th>Estado</th><th>Acciones</th></tr></thead>';
                 html += '<tbody>';
                 ins.forEach(insurance => {
@@ -641,7 +701,7 @@
                     html += `</td>`;
                     html += `</tr>`;
                 });
-                html += '</tbody></table>';
+                html += '</tbody></table></div>';
             } else {
                 html += '<p style="color: #666;">No tiene seguros registrados</p>';
             }
@@ -655,7 +715,7 @@
             
             if (prescriptions.length > 0) {
                 html += '<div style="max-height: 400px; overflow-y: auto;">';
-                html += '<table class="table table-sm table-sticky" style="background: white; margin-top: 10px;">';
+                html += '<div class="table-wrapper"><table class="table table-sm table-sticky" style="background: white; margin-top: 10px;">';
                 html += '<thead><tr><th>Medicamento</th><th>Dosis</th><th>Frecuencia</th><th>Requerido</th><th> Retiro</th><th>Renovaciones</th><th>Acciones</th></tr></thead>';
                 html += '<tbody>';
                 prescriptions.forEach(rx => {
@@ -679,7 +739,7 @@
                     html += `</td>`;
                     html += `</tr>`;
                 });
-                html += '</tbody></table>';
+                html += '</tbody></table></div>';
                 html += '</div>';
             } else {
                 html += '<p style="color: #856404;">No tiene recetas activas</p>';
@@ -692,7 +752,7 @@
             
             if (purchaseHistory && purchaseHistory.length > 0) {
                 const totalSpent = purchaseHistory.reduce((sum, sale) => sum + parseFloat(sale.TotalAmount || 0), 0);
-                html += '<table class="table table-sm table-sticky" style="background: white; margin-top: 10px;">';
+                html += '<div class="table-wrapper"><table class="table table-sm table-sticky" style="background: white; margin-top: 10px;">';
                 html += '<thead><tr><th>Fecha</th><th>Productos</th><th>Total</th></tr></thead>';
                 html += '<tbody>';
                 purchaseHistory.forEach(sale => {
@@ -704,7 +764,7 @@
                     html += `<td>${fmtCurrency(sale.TotalAmount)}</td>`;
                     html += `</tr>`;
                 });
-                html += '</tbody></table>';
+                html += '</tbody></table></div>';
                 html += `<p style="text-align: right; margin-top: 10px;"><strong>Total gastado:</strong> ${fmtCurrency(totalSpent)}</p>`;
             } else {
                 html += '<p style="color: #666;">No tiene historial de compras</p>';

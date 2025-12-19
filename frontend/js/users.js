@@ -85,7 +85,7 @@ function displayUsers(users) {
     const container = document.getElementById('usersList');
     
     container.innerHTML = `
-        <table class="table">
+        <div class="table-wrapper"><table class="table table-sticky">
             <thead>
                 <tr>
                     <th>ID</th>
@@ -132,7 +132,7 @@ function displayUsers(users) {
                     </tr>
                 `).join('')}
             </tbody>
-        </table>
+        </table></div>
     `;
 }
 

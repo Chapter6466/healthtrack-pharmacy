@@ -162,6 +162,8 @@
                             <button class="btn btn-primary" id="btnSearch"><i class="fas fa-circle"></i> Buscar</button>
                             <button class="btn btn-secondary" id="btnClearFilters"><i class="fas fa-circle"></i> Limpiar Filtros</button>
                         </div>
+
+                        <div id="invoiceFilterChips" class="filter-chips"></div>
                     </div>
                 </div>
             </div>
@@ -178,8 +180,8 @@
                         <p>Cargando facturas...</p>
                     </div>
 
-                    <div id="invoicesTableContainer" class="overflow-x-auto">
-                        <table class="table" id="invoicesTable">
+                    <div id="invoicesTableContainer" class="table-wrapper">
+                        <table class="table table-sticky" id="invoicesTable">
                             <thead>
                                 <tr>
                                     <th>Factura #</th>
