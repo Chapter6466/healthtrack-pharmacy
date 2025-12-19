@@ -116,11 +116,15 @@
                                     Buscar
                                 </button>
                             </div>
-                            <div id="selectedPatient" class="selected-patient-info d-none">
-                                <div class="alert alert-info">
-                                    <strong id="patientName"></strong>
+                            <div id="selectedPatient" class="selected-patient-info d-none" style="margin-top:10px;">
+                                <div class="alert alert-info" style="display:flex; justify-content:space-between; align-items:flex-start; gap:10px;">
+                                    <div>
+                                        <strong id="patientName"></strong>
+                                        <div id="patientDoc" style="font-size:13px;"></div>
+                                    </div>
                                     <button class="btn btn-sm btn-danger" id="clearPatientBtn" class="float-right">
-                                        &#9642;                                    </button>
+                                        <i class="fas fa-times"></i>
+                                    </button>
                                 </div>
                             </div>
                         </div>

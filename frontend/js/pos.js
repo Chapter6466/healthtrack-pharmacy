@@ -281,17 +281,24 @@
     selectedPatient = { PatientID: patientId, FullName: name, DocumentID: documentId };
 
     const patientInput = document.getElementById('patientSearch');
-    if (patientInput) patientInput.value = name;
+    if (patientInput) {
+      patientInput.value = '';
+      patientInput.placeholder = 'Buscar paciente...';
+    }
 
     const selectedDiv = document.getElementById('selectedPatient');
     const patientNameSpan = document.getElementById('patientName');
+    const patientDocSpan = document.getElementById('patientDoc');
 
-    if (selectedDiv && patientNameSpan) {
-      patientNameSpan.textContent = name;
+    if (patientNameSpan) patientNameSpan.textContent = name;
+    if (patientDocSpan) patientDocSpan.textContent = documentId ? `Documento: ${documentId}` : 'Sin documento';
+    if (selectedDiv) {
+      selectedDiv.classList.remove('d-none');
       selectedDiv.style.display = 'block';
     }
 
-    document.getElementById('patientAutocomplete')?.style && (document.getElementById('patientAutocomplete').style.display = 'none');
+    const auto = document.getElementById('patientAutocomplete');
+    if (auto && auto.style) auto.style.display = 'none';
   };
 
   function clearSelectedPatient() {
@@ -474,17 +481,23 @@
       subtotal += itemTotal;
 
       html += `
-        <div class="cart-item" style="padding: 15px; border-bottom: 1px solid #f0f0f0; display: flex; justify-content: space-between; align-items: center;">
+        <div class="cart-item" style="padding: 15px; border-bottom: 1px solid #f0f0f0; display: flex; justify-content: space-between; align-items: center; gap: 10px; flex-wrap: wrap;">
           <div style="flex: 1;">
             <div style="font-weight: 600; color: #2C5F8D; margin-bottom: 5px;">${escapeHtml(item.ProductName)}</div>
             <div style="font-size: 14px; color: #666;">${fmtCurrency(item.Price)} x ${item.quantity}</div>
           </div>
           <div style="display: flex; align-items: center; gap: 10px;">
-            <input type="number" value="${item.quantity}" min="1" max="${item.maxStock}"
-              onchange="window.updateCartQuantity(${index}, this.value)"
-              style="width: 60px; padding: 5px; border: 1px solid #ddd; border-radius: 4px; text-align: center;">
+            <div class="cart-item-quantity">
+              <button type="button" class="qty-btn" onclick="window.updateCartQuantity(${index}, ${item.quantity - 1})">-</button>
+              <input type="number" value="${item.quantity}" min="0" max="${item.maxStock}"
+                onchange="window.updateCartQuantity(${index}, this.value)"
+                style="width: 60px; padding: 5px; border: 1px solid #ddd; border-radius: 4px; text-align: center;">
+              <button type="button" class="qty-btn" onclick="window.updateCartQuantity(${index}, ${item.quantity + 1})">+</button>
+            </div>
             <div style="font-weight: 600; min-width: 80px; text-align: right;">${fmtCurrency(itemTotal)}</div>
-            <button onclick="window.removeFromCart(${index})" style="background: #dc3545; color: white; border: none; padding: 5px 10px; border-radius: 4px; cursor: pointer;">
+            <button onclick="window.removeFromCart(${index})" style="background: #dc3545; color: white; border: none; padding: 6px 10px; border-radius: 6px; cursor: pointer; display:flex; align-items:center; gap:4px;">
+              <i class="fas fa-trash-alt"></i>
+            </button>
           </div>
         </div>
       `;
@@ -507,13 +520,15 @@
 
   window.updateCartQuantity = function (index, newQuantity) {
     const qty = parseInt(newQuantity, 10);
-    if (!Number.isFinite(qty) || qty < 1 || qty > cart[index].maxStock) {
-      showToast('Cantidad invalida', 'warning');
-      updateCartDisplay();
+    if (!Number.isFinite(qty)) return;
+
+    if (qty <= 0) {
+      removeFromCart(index);
       return;
     }
 
-    cart[index].quantity = qty;
+    cart[index].quantity =
+      qty > cart[index].maxStock ? cart[index].maxStock : qty;
     updateCartDisplay();
   };
 
@@ -696,12 +711,24 @@
     }
 
     // Build items
-    const items = cart.map((item) => ({
-      productId: item.ProductID,
-      quantity: item.quantity,
-      unitPrice: Number(item.Price || 0),
-      subtotal: Number(item.Price || 0) * Number(item.quantity || 0)
-    }));
+    const items = cart.map((item) => {
+      const qty = Number(item.quantity || 0);
+      const unit = Number(item.Price || 0);
+      const lineTotal = unit * qty;
+      return {
+        productId: item.ProductID,
+        batchId: item.BatchID || null,
+        locationId: item.LocationID || null,
+        unitId: item.UnitID || null,
+        taxId: item.TaxID || 1,
+        quantity: qty,
+        unitPrice: unit,
+        discountPct: 0,
+        lineTotal: lineTotal,
+        insurancePortion: 0,
+        patientPortion: lineTotal
+      };
+    });
 
     const saleData = {
       patientId: selectedPatient ? selectedPatient.PatientID : null,

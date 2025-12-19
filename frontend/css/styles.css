@@ -1302,7 +1302,7 @@ textarea.form-control {
     display: block;
     margin-bottom: 5px;
     font-weight: 600;
-    color: white;
+    color: var(--text-dark);
     font-size: 14px;
 }
 
