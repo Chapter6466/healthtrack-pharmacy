@@ -738,7 +738,8 @@
       const result = await response.json();
 
       if (result.success) {
-        showToast(`nta completada! Factura: ${result.invoiceNumber}`, 'success');
+        const displayNumber = result.invoiceNumber || result.invoiceId || 'sin numero';
+        showToast(`Venta completada! Factura: ${displayNumber}`, 'success');
         cart = [];
         clearSelectedPatient();
         updateCartDisplay();

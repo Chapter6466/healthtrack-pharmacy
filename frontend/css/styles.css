@@ -758,13 +758,23 @@ textarea.form-control {
     flex: 1;
 }
 
-#searchBtn {
+#searchBtn,
+#searchPatientsBtn,
+.btnSearch,
+#selectPatientBtn,
+.search-bar .btn-primary,
+.filter-group-flex .btn-primary {
     background: #1a3a5c;
     color: #fff;
     border: 1px solid #1a3a5c;
 }
 
-#searchBtn:hover:not(:disabled) {
+#searchBtn:hover:not(:disabled),
+#searchPatientsBtn:hover:not(:disabled),
+.btnSearch:hover:not(:disabled),
+#selectPatientBtn:hover:not(:disabled),
+.search-bar .btn-primary:hover:not(:disabled),
+.filter-group-flex .btn-primary:hover:not(:disabled) {
     background: #16304f;
     border-color: #16304f;
 }

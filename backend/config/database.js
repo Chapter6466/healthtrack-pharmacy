@@ -60,7 +60,11 @@ async function executeStoredProcedure(procedureName, params = {}) {
         });
         
         const result = await request.execute(procedureName);
-        return result.recordsets;
+        const recordsets = result.recordsets || [];
+        // Attach metadata without breaking existing array usage
+        recordsets.returnValue = result.returnValue;
+        recordsets.rowsAffected = result.rowsAffected;
+        return recordsets;
     } catch (error) {
         console.error(`❌ Error executing ${procedureName}:`, error.message);
         throw error;
