@@ -2,6 +2,14 @@
 (function () {
   'use strict';
 
+  const crcFormatter = new Intl.NumberFormat('es-CR', {
+    style: 'currency',
+    currency: 'CRC',
+    currencyDisplay: 'code',
+    minimumFractionDigits: 2,
+    maximumFractionDigits: 2
+  });
+
   document.addEventListener('DOMContentLoaded', () => init());
 
   async function init() {
@@ -14,7 +22,14 @@
 
   function setTodayLabel() {
     const el = document.getElementById('currentDate');
-    if (el) el.textContent = new Date().toLocaleDateString('es-CR', { weekday:'long', year:'numeric', month:'long', day:'numeric' });
+    if (el) {
+      el.textContent = new Date().toLocaleDateString('es-CR', {
+        weekday: 'long',
+        year: 'numeric',
+        month: 'long',
+        day: 'numeric'
+      });
+    }
   }
 
   function setupFilters() {
@@ -26,8 +41,10 @@
 
     btnApply?.addEventListener('click', () => loadAll());
     btnClear?.addEventListener('click', () => {
-      document.getElementById('filterStartDate').value = '';
-      document.getElementById('filterEndDate').value = '';
+      const start = document.getElementById('filterStartDate');
+      const end = document.getElementById('filterEndDate');
+      if (start) start.value = '';
+      if (end) end.value = '';
       loadAll();
     });
 
@@ -45,8 +62,10 @@
     const end = new Date();
     const start = new Date();
     start.setDate(start.getDate() - (days - 1));
-    document.getElementById('filterStartDate').value = toISODate(start);
-    document.getElementById('filterEndDate').value = toISODate(end);
+    const startInput = document.getElementById('filterStartDate');
+    const endInput = document.getElementById('filterEndDate');
+    if (startInput) startInput.value = toISODate(start);
+    if (endInput) endInput.value = toISODate(end);
     loadAll();
   }
 
@@ -54,8 +73,10 @@
     const now = new Date();
     const start = new Date(now.getFullYear(), now.getMonth(), 1);
     const end = new Date(now.getFullYear(), now.getMonth() + 1, 0);
-    document.getElementById('filterStartDate').value = toISODate(start);
-    document.getElementById('filterEndDate').value = toISODate(end);
+    const startInput = document.getElementById('filterStartDate');
+    const endInput = document.getElementById('filterEndDate');
+    if (startInput) startInput.value = toISODate(start);
+    if (endInput) endInput.value = toISODate(end);
     loadAll();
   }
 
@@ -92,7 +113,6 @@
     if (!data.success) return;
 
     const o = data.overview || {};
-
     setText('kpiInvoices', o.TotalInvoices ?? 0);
     setText('kpiActive', o.ActiveInvoices ?? 0);
     setText('kpiVoided', o.VoidedInvoices ?? 0);
@@ -209,8 +229,8 @@
 
   function fmtCRC(value) {
     const n = Number(value);
-    if (!Number.isFinite(n)) return '.00';
-    return ' + n.toLocaleString('es-CR', { minimumFractionDigits: 2, maximumFractionDigits: 2 });
+    if (!Number.isFinite(n)) return crcFormatter.format(0);
+    return crcFormatter.format(n);
   }
 
   function esc(text) {
@@ -220,7 +240,6 @@
     return div.innerHTML;
   }
 
-  // CSV export from any HTML table
   function exportTableCSV(tableId, filename) {
     const table = document.getElementById(tableId);
     if (!table) return;
@@ -241,31 +260,4 @@
     URL.revokeObjectURL(url);
     document.body.removeChild(a);
   }
-
-  // Auth/UI helpers (reuse your patterns)
-  async function initUserInfo() {
-    const response = await fetch('/api/auth/session', { credentials: 'include' });
-    if (!response.ok) return (window.location.href = 'login.html');
-    const data = await response.json();
-    if (!data.loggedIn) return (window.location.href = 'login.html');
-
-    const userName = data.user.fullName || data.user.Username || data.user.username || 'Usuario';
-    const userRole = data.user.roleName || data.user.RoleName || data.user.role || 'Usuario';
-
-    const elName = document.getElementById('userName');
-    const elRole = document.getElementById('userRole');
-    const elAvatar = document.getElementById('userAvatar');
-    if (elName) elName.textContent = userName;
-    if (elRole) elRole.textContent = userRole;
-    if (elAvatar) elAvatar.textContent = userName.split(' ').map(n => n[0]).join('').substring(0, 2).toUpperCase();
-  }
-
-  function setupLogout() {
-    document.getElementById('logoutBtn')?.addEventListener('click', async () => {
-      try { await fetch('/api/auth/logout', { method: 'POST', credentials: 'include' }); } catch (_) {}
-      window.location.href = 'login.html';
-    });
-  }
 })();
-    console.error(' reports/top-products:', error);
-    res.status(500).json({ success: false, message: 'Error loading top products', error: error.message });

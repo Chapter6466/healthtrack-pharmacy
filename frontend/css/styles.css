@@ -2096,6 +2096,36 @@ input:checked + .toggle-slider:before {
     margin-right: 0;
 }
 
+.btn-icon {
+    width: 32px;
+    height: 32px;
+    padding: 6px;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: 6px;
+    margin-right: 4px;
+}
+
+.btn-icon i {
+    margin: 0;
+    font-size: 14px;
+}
+
+.btn-icon:hover:not(:disabled) {
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.12);
+    transform: translateY(-1px);
+}
+
+.btn-teal {
+    background: #0d9488;
+    color: white;
+}
+
+.btn-teal:hover:not(:disabled) {
+    background: #0b7a71;
+}
+
 
 /* ========================================
    TABLE STYLES - CONSOLIDATED
@@ -2112,6 +2142,18 @@ input:checked + .toggle-slider:before {
 .table thead {
     background: #E8F0F7;
     border-bottom: 3px solid #B8D4E8;
+}
+
+.table-sticky {
+    border-collapse: separate;
+    border-spacing: 0;
+}
+
+.table-sticky thead th {
+    position: sticky;
+    top: 0;
+    z-index: 3;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
 }
 
 .table thead th {
@@ -2136,6 +2178,10 @@ input:checked + .toggle-slider:before {
 .table tbody tr {
     border-bottom: 1px solid #e0e0e0;
     transition: background-color 0.2s;
+}
+
+.table tbody tr:nth-child(even) {
+    background-color: #f8fafc;
 }
 
 .table tbody tr:hover {

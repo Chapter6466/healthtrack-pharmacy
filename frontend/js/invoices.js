@@ -197,19 +197,19 @@ function displayInvoices(invoices) {
             <td>
                 <span class="badge badge-info">${invoice.ItemCount || 0}</span>
             </td>
-            <td style="white-space: nowrap;">
-                <button class="btn btn-sm btn-primary" onclick="viewInvoice(${invoice.InvoiceID})" title="Ver detalles">
-                    👁️ Ver
+            <td class="action-cell" style="white-space: nowrap;">
+                <button class="btn btn-sm btn-info btn-icon" onclick="viewInvoice(${invoice.InvoiceID})" title="Ver detalles" aria-label="Ver detalles">
+                    <i class="fa-solid fa-eye"></i>
                 </button>
-                <button class="btn btn-sm btn-success" onclick="downloadPDF(${invoice.InvoiceID}, this)" title="Descargar PDF">
-                    📄 PDF
+                <button class="btn btn-sm btn-danger btn-icon" onclick="downloadPDF(${invoice.InvoiceID}, this)" title="Descargar PDF" aria-label="Descargar PDF">
+                    <i class="fa-solid fa-file-pdf"></i>
                 </button>
                 ${!invoice.IsVoided ? `
-                    <button class="btn btn-sm btn-warning" onclick="showVoidModal(${invoice.InvoiceID})" title="Anular factura">
-                        ❌ Anular
+                    <button class="btn btn-sm btn-danger btn-icon" onclick="showVoidModal(${invoice.InvoiceID})" title="Anular factura" aria-label="Anular factura">
+                        <i class="fa-solid fa-circle-xmark"></i>
                     </button>
-                    <button class="btn btn-sm btn-info" onclick="showRefundModal(${invoice.InvoiceID})" title="Procesar reembolso">
-                        💰 Reembolso
+                    <button class="btn btn-sm btn-teal btn-icon" onclick="showRefundModal(${invoice.InvoiceID})" title="Procesar reembolso" aria-label="Procesar reembolso">
+                        <i class="fa-solid fa-money-bill-transfer"></i>
                     </button>
                 ` : ''}
             </td>
@@ -219,14 +219,14 @@ function displayInvoices(invoices) {
 
 function getStatusBadge(invoice) {
     if (invoice.IsVoided) {
-        return '<span class="badge badge-danger">❌ Anulada</span>';
+        return '<span class="badge badge-danger">Anulada</span>';
     }
 
     if (invoice.HasRefund) {
-        return '<span class="badge badge-warning">💰 Con Reembolso</span>';
+        return '<span class="badge badge-warning">Con Reembolso</span>';
     }
 
-    return '<span class="badge badge-success">✅ Activa</span>';
+    return '<span class="badge badge-success">Activa</span>';
 }
 
 // ============================================
@@ -276,10 +276,10 @@ function showInvoiceDetailsModal(invoice, items, refunds) {
 
     const refundsHtml = hasRefunds ? refunds.map(refund => `
         <div class="alert alert-warning" style="margin-bottom: 10px;">
-            <strong>💰 Reembolso #${refund.RefundID}</strong><br>
+            <strong>Reembolso #${refund.RefundID}</strong><br>
             <strong>Monto:</strong> ${fmtCurrency(refund.RefundAmount)}<br>
-            <strong>Raz/strong> ${escHtml(refund.RefundReason)}<br>
-            <strong>Mo:</strong> ${refund.RefundMethod}<br>
+            <strong>Razon:</strong> ${escHtml(refund.RefundReason)}<br>
+            <strong>Metodo:</strong> ${refund.RefundMethod}<br>
             <strong>Procesado por:</strong> ${escHtml(refund.ProcessedByName)} el ${fmtDateTime(refund.ProcessedAt)}<br>
             ${refund.Notes ? `<strong>Notas:</strong> ${escHtml(refund.Notes)}` : ''}
         </div>
@@ -287,8 +287,8 @@ function showInvoiceDetailsModal(invoice, items, refunds) {
 
     const voidInfo = isVoided ? `
         <div class="alert alert-danger" style="margin-bottom: 20px;">
-            <h4 style="margin: 0 0 10px 0;">⚠️ FACTURA ANULADA</h4>
-            <strong>Raz/strong> ${escHtml(invoice.VoidReason)}<br>
+            <h4 style="margin: 0 0 10px 0;">FACTURA ANULADA</h4>
+            <strong>Razon:</strong> ${escHtml(invoice.VoidReason)}<br>
             <strong>Anulado por:</strong> ${escHtml(invoice.VoidedByName || 'N/A')} el ${fmtDateTime(invoice.VoidedAt)}
         </div>
     ` : '';
@@ -316,7 +316,7 @@ function showInvoiceDetailsModal(invoice, items, refunds) {
             </div>
         </div>
 
-        <h4>📦 Items de la Factura</h4>
+        <h4>Items de la Factura</h4>
         <div style="overflow-x: auto;">
             <table class="table table-sm">
                 <thead>
@@ -335,12 +335,12 @@ function showInvoiceDetailsModal(invoice, items, refunds) {
             </table>
         </div>
 
-        <h4 style="margin-top: 20px;">📋 Historial de Reembolsos</h4>
+        <h4 style="margin-top: 20px;">Historial de Reembolsos</h4>
         ${refundsHtml}
 
         <div style="text-align: center; margin-top: 30px;">
             <button class="btn btn-success btn-lg" onclick="downloadPDF(${invoice.InvoiceID})">
-                📄 Descargar PDF
+                Descargar PDF
             </button>
         </div>
     `;
@@ -354,14 +354,14 @@ function showInvoiceDetailsModal(invoice, items, refunds) {
 
 window.downloadPDF = async function(invoiceId, buttonEl = null) {
     try {
-        console.log(`📄 Downloading PDF for invoice #${invoiceId}`);
+        console.log(`Downloading PDF for invoice #${invoiceId}`);
 
         // Try to infer button if not provided
         const btn = buttonEl || (typeof window !== 'undefined' && window.event ? window.event.target : null);
         if (btn && btn.tagName === 'BUTTON') {
             btn.disabled = true;
             btn.dataset.originalText = btn.innerHTML;
-            btn.innerHTML = '⏳ Generando...';
+            btn.innerHTML = 'Generando...';
         }
 
         const response = await fetch(`/api/invoices/${invoiceId}/pdf`, {
@@ -383,11 +383,11 @@ window.downloadPDF = async function(invoiceId, buttonEl = null) {
         window.URL.revokeObjectURL(url);
         document.body.removeChild(a);
 
-        console.log('✅ PDF downloaded successfully');
+        console.log('PDF downloaded successfully');
 
         if (btn && btn.tagName === 'BUTTON') {
             btn.disabled = false;
-            btn.innerHTML = btn.dataset.originalText || '📄 PDF';
+            btn.innerHTML = btn.dataset.originalText || 'PDF';
         }
 
     } catch (error) {
@@ -397,7 +397,7 @@ window.downloadPDF = async function(invoiceId, buttonEl = null) {
         const btn = buttonEl || (typeof window !== 'undefined' && window.event ? window.event.target : null);
         if (btn && btn.tagName === 'BUTTON') {
             btn.disabled = false;
-            btn.innerHTML = btn.dataset.originalText || '📄 PDF';
+            btn.innerHTML = btn.dataset.originalText || 'PDF';
         }
     }
 };
@@ -409,15 +409,15 @@ window.downloadPDF = async function(invoiceId, buttonEl = null) {
 window.showVoidModal = async function(invoiceId) {
     const bodyHtml = `
         <div class="alert alert-warning">
-            <strong>⚠️ Advertencia:</strong> Esta acci anular la factura y restaurar el inventario automamente. Esta acci no se puede deshacer.
+            <strong>Advertencia:</strong> Esta accion anulara la factura y restaurara el inventario automaticamente. Esta accion no se puede deshacer.
         </div>
         <div class="form-group">
-            <label>Raz de Anulaci *</label>
-            <textarea id="voidReason" class="form-control" rows="3" placeholder="Ingrese la raz de la anulaci." required></textarea>
+            <label>Razon de Anulacion *</label>
+            <textarea id="voidReason" class="form-control" rows="3" placeholder="Ingrese la razon de la anulacion." required></textarea>
         </div>
         <div style="display: flex; gap: 10px; justify-content: flex-end; margin-top: 20px;">
             <button class="btn btn-secondary" onclick="closeModal()">Cancelar</button>
-            <button class="btn btn-danger" onclick="confirmVoid(${invoiceId})">❌ Anular Factura</button>
+            <button class="btn btn-danger" onclick="confirmVoid(${invoiceId})">Anular Factura</button>
         </div>
     `;
 
@@ -428,11 +428,11 @@ window.confirmVoid = async function(invoiceId) {
     const reason = document.getElementById('voidReason').value.trim();
 
     if (!reason) {
-        alert('Por favor ingrese una raz para la anulaci;
+        alert('Por favor ingrese una razon para la anulacion.');
         return;
     }
 
-    if (!confirm('¿Est seguro que desea anular esta factura? Esta acci no se puede deshacer.')) {
+    if (!confirm('Esta seguro que desea anular esta factura? Esta accion no se puede deshacer.')) {
         return;
     }
 
@@ -447,7 +447,7 @@ window.confirmVoid = async function(invoiceId) {
         const data = await response.json();
 
         if (data.success) {
-            alert('✅ Factura anulada exitosamente. El inventario ha sido restaurado.');
+            alert('Factura anulada exitosamente. El inventario ha sido restaurado.');
             closeModal();
             loadStats();
             loadInvoices();
@@ -513,7 +513,7 @@ function showRefundForm(invoiceId, invoice, items) {
 
     const bodyHtml = `
         <div class="alert alert-info">
-            <strong>ℹ️ Informaci/strong> Puede procesar un reembolso completo o seleccionar items especos para reembolso parcial. El inventario se restaurar automamente.
+            <strong>Informacion:</strong> Puede procesar un reembolso completo o seleccionar items especificos para reembolso parcial. El inventario se restaurara automaticamente.
         </div>
 
         <div class="form-group">
@@ -541,12 +541,12 @@ function showRefundForm(invoiceId, invoice, items) {
         </div>
 
         <div class="form-group">
-            <label>Mo de Reembolso *</label>
+            <label>Metodo de Reembolso *</label>
             <select id="refundMethod" class="form-control" required>
                 <option value="">Seleccione...</option>
-                <option value="CASH">💵 Efectivo</option>
-                <option value="CARD">💳 Tarjeta</option>
-                <option value="CREDIT_NOTE">📝 Nota de Cro</option>
+                <option value="CASH">Efectivo</option>
+                <option value="CARD">Tarjeta</option>
+                <option value="CREDIT_NOTE">Nota de Credito</option>
             </select>
         </div>
 
@@ -562,7 +562,7 @@ function showRefundForm(invoiceId, invoice, items) {
 
         <div style="display: flex; gap: 10px; justify-content: flex-end; margin-top: 20px;">
             <button class="btn btn-secondary" onclick="closeModal()">Cancelar</button>
-            <button class="btn btn-success" onclick="processRefund(${invoiceId})">💰 Procesar Reembolso</button>
+            <button class="btn btn-success" onclick="processRefund(${invoiceId})">Procesar Reembolso</button>
         </div>
     `;
 
@@ -643,7 +643,7 @@ window.processRefund = async function(invoiceId) {
         return;
     }
 
-    if (!confirm(`¿Confirma el reembolso de ${fmtCurrency(refundAmount)}?`)) {
+    if (!confirm(`Confirma el reembolso de ${fmtCurrency(refundAmount)}?`)) {
         return;
     }
 
@@ -664,7 +664,7 @@ window.processRefund = async function(invoiceId) {
         const data = await response.json();
 
         if (data.success) {
-            alert('✅ Reembolso procesado exitosamente. El inventario ha sido restaurado.');
+        alert('Reembolso procesado exitosamente. El inventario ha sido restaurado.');
             closeModal();
             loadStats();
             loadInvoices();
@@ -746,7 +746,7 @@ function fmtDateTime(dateStr) {
 
 function fmtCurrency(amount) {
     const n = Number(amount);
-    if (!Number.isFinite(n)) return '₡0.00';
-    // Costa Rica formatting; keep two decimals
-    return '₡' + n.toLocaleString('es-CR', { minimumFractionDigits: 2, maximumFractionDigits: 2 });
+    if (!Number.isFinite(n)) return 'CRC 0.00';
+    // Costa Rica formatting; keep two decimals, prefix with currency code for ASCII
+    return 'CRC ' + n.toLocaleString('es-CR', { minimumFractionDigits: 2, maximumFractionDigits: 2 });
 }

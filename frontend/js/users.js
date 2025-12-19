@@ -111,19 +111,23 @@ function displayUsers(users) {
                             </span>
                         </td>
                         <td>${user.WarehouseName || 'N/A'}</td>
-                        <td>
+                        <td class="action-cell">
                             <span class="badge badge-${user.IsActive ? 'success' : 'danger'}">
                                 ${user.IsActive ? 'Activo' : 'Inactivo'}
                             </span>
                         </td>
                         <td>
-                            <button class="btn btn-sm btn-primary" onclick="editUser(${user.UserID})">
-                                 Editar
+                            <button class="btn btn-sm btn-warning btn-icon" onclick="editUser(${user.UserID})" title="Editar" aria-label="Editar">
+                                <i class="fa-solid fa-pen"></i>
                             </button>
-                            <button class="btn btn-sm btn-${user.IsActive ? 'warning' : 'success'}" 
-                                    onclick="toggleUserStatus(${user.UserID}, ${!user.IsActive})">
-                                ${user.IsActive ? ' Desactivar' : ' Activar'}
-                            </button>
+                            ${user.IsActive
+                                ? `<button class="btn btn-sm btn-danger btn-icon" onclick="toggleUserStatus(${user.UserID}, false)" title="Desactivar" aria-label="Desactivar">
+                                     <i class="fa-solid fa-ban"></i>
+                                   </button>`
+                                : `<button class="btn btn-sm btn-success btn-icon" onclick="toggleUserStatus(${user.UserID}, true)" title="Activar" aria-label="Activar">
+                                     <i class="fa-solid fa-circle-check"></i>
+                                   </button>`
+                            }
                         </td>
                     </tr>
                 `).join('')}

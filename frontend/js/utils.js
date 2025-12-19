@@ -62,7 +62,8 @@ function setupLogout() {
 function formatCurrency(amount) {
     return new Intl.NumberFormat('es-CR', {
         style: 'currency',
-        currency: 'CRC'
+        currency: 'CRC',
+        currencyDisplay: 'code'
     }).format(amount);
 }
 
@@ -170,15 +171,15 @@ function getStockStatusClass(status) {
 }
 
 // Get stock status text
-function getStockStatusText(status) {
+  function getStockStatusText(status) {
     const statusMap = {
-        'CRITICAL': ' Cr
-        'LOW': ' Bajo',
-        'NORMAL': ' Normal',
-        'OVERSTOCK': ' Exceso'
+        'CRITICAL': 'Critico',
+        'LOW': 'Bajo',
+        'NORMAL': 'Normal',
+        'OVERSTOCK': 'Exceso'
     };
     return statusMap[status] || status;
-}
+  }
 
 // Debounce function for search inputs
 function debounce(func, wait) {

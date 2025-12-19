@@ -186,7 +186,7 @@
             
         } catch (error) {
             console.error(' Error loading doctors:', error);
-            alert('Error al cargar doctores. Por favor recarga la p
+            alert('Error al cargar doctores. Por favor recarga la pagina.');
         }
     }
     
@@ -270,12 +270,12 @@
             return;
         }
         
-        let html = '<table class="table" style="width: 100%; background: white; border-radius: 8px; overflow: hidden;">';
+        let html = '<table class="table table-sticky" style="width: 100%; background: white; border-radius: 8px; overflow: hidden;">';
         html += '<thead><tr>';
         html += '<th>Nombre</th>';
         html += '<th>Licencia</th>';
         html += '<th>Especialidad</th>';
-        html += '<th>Tel
+        html += '<th>Telefono</th>';
         html += '<th>Email</th>';
         html += '<th>Seguros</th>';
         html += '<th>Recetas</th>';
@@ -291,10 +291,10 @@
             html += `<td>${escHtml(d.Email || 'N/A')}</td>`;
             html += `<td><span class="badge badge-info">${d.InsuranceCount || 0}</span></td>`;
             html += `<td><span class="badge badge-success">${d.PrescriptionCount || 0}</span></td>`;
-            html += `<td style="white-space: nowrap;">`;
-            html += `<button class="btn btn-sm btn-primary" onclick="window.viewDoctor(${d.PrescriberID})" title="Ver detalles"> `;
-            html += `<button class="btn btn-sm btn-warning" onclick="window.editDoctor(${d.PrescriberID})" title="Editar"> `;
-            html += `<button class="btn btn-sm btn-danger" onclick="window.deactivateDoctor(${d.PrescriberID})" title="Desactivar">
+            html += `<td class="action-cell" style="white-space: nowrap;">`;
+            html += `<button class="btn btn-sm btn-info btn-icon" onclick="window.viewDoctor(${d.PrescriberID})" title="Ver detalles" aria-label="Ver detalles"><i class="fa-solid fa-eye"></i></button> `;
+            html += `<button class="btn btn-sm btn-warning btn-icon" onclick="window.editDoctor(${d.PrescriberID})" title="Editar" aria-label="Editar"><i class="fa-solid fa-pen"></i></button> `;
+            html += `<button class="btn btn-sm btn-danger btn-icon" onclick="window.deactivateDoctor(${d.PrescriberID})" title="Desactivar" aria-label="Desactivar"><i class="fa-solid fa-ban"></i></button>`;
             html += `</td>`;
             html += '</tr>';
         });
@@ -318,7 +318,7 @@
             html += '<div style="background: white; border: 2px solid #e0e0e0; border-radius: 8px; padding: 15px;">';
             html += `<div style="display: flex; justify-content: space-between; align-items: start; margin-bottom: 10px;">`;
             html += `<h4 style="margin: 0; color: #333;">${escHtml(dr.InsuranceName)}</h4>`;
-            html += `<button class="btn btn-xs btn-primary" onclick="window.editDiscountRate(${dr.InsuranceProviderID}, '${escHtml(dr.InsuranceName)}', ${dr.DiscountPercentage}, ${dr.MinimumPrescriptionAmount || 0}, ${dr.MaximumDiscountAmount || 0})">
+            html += `<button class="btn btn-xs btn-primary" onclick="window.editDiscountRate(${dr.InsuranceProviderID}, '${escHtml(dr.InsuranceName)}', ${dr.DiscountPercentage}, ${dr.MinimumPrescriptionAmount || 0}, ${dr.MaximumDiscountAmount || 0})">Editar</button>`;
             html += `</div>`;
             html += `<div style="font-size: 32px; font-weight: bold; color: #28a745; margin: 10px 0;">${dr.DiscountPercentage}%</div>`;
             html += `<div style="font-size: 13px; color: #666;">`;
@@ -379,7 +379,7 @@
             
             // Statistics
             html += '<div style="background: #e3f2fd; padding: 20px; border-radius: 8px; margin-bottom: 20px;">';
-            html += '<h4 style="color: #1976d2; margin-top: 0;"> Estad
+            html += '<h4 style="color: #1976d2; margin-top: 0;"> Estadisticas</h4>';
             html += '<div style="display: grid; grid-template-columns: repeat(3, 1fr); gap: 15px;">';
             html += `<div style="text-align: center;"><div style="font-size: 24px; font-weight: bold; color: #1976d2;">${stats.TotalPrescriptions || 0}</div><div style="color: #666; font-size: 14px;">Recetas Totales</div></div>`;
             html += `<div style="text-align: center;"><div style="font-size: 24px; font-weight: bold; color: #1976d2;">${stats.ActivePrescriptions || 0}</div><div style="color: #666; font-size: 14px;">Recetas Activas</div></div>`;
@@ -397,12 +397,12 @@
             html += '</h4>';
             
             if (insurance.length > 0) {
-                html += '<table class="table" style="background: white; margin-top: 10px;">';
+                html += '<table class="table table-sticky" style="background: white; margin-top: 10px;">';
                 html += '<thead><tr><th>Seguro</th><th>Contrato</th><th>Vigencia</th><th>Descuento</th><th>Acciones</th></tr></thead>';
                 html += '<tbody>';
                 insurance.forEach(ins => {
                     const effectiveFrom = ins.EffectiveFrom ? fmtDate(ins.EffectiveFrom) : '-';
-                    const effectiveTo = ins.EffectiveTo ? fmtDate(ins.EffectiveTo) : ';
+                    const effectiveTo = ins.EffectiveTo ? fmtDate(ins.EffectiveTo) : '-';
                     const vigencia = `${effectiveFrom} - ${effectiveTo}`;
                     const status = ins.IsActive ? ' Activo' : ' Inactivo';
                     
@@ -413,7 +413,9 @@
                     html += `<td><span class="badge badge-success">${ins.DiscountPercentage || 0}%</span></td>`;
                     html += `<td>`;
                     if (ins.IsActive) {
-                        html += `<button class="btn btn-xs btn-danger" onclick="window.removeInsurancePartnership(${ins.PrescriberInsuranceID}, ${id})">
+                        html += `<button class="btn btn-xs btn-danger" onclick="window.removeInsurancePartnership(${ins.PrescriberInsuranceID}, ${id})">Quitar</button>`;
+                    } else {
+                        html += `<span class="badge badge-secondary">Inactivo</span>`;
                     }
                     html += `</td>`;
                     html += `</tr>`;
@@ -470,11 +472,11 @@
         html += '<option value="General Medicine">Medicina General</option>';
         html += '<option value="Family Medicine">Medicina Familiar</option>';
         html += '<option value="Internal Medicine">Medicina Interna</option>';
-        html += '<option value="Cardiology">Cardiolog
-        html += '<option value="Endocrinology">Endocrinolog
-        html += '<option value="Pulmonology">Neumolog
-        html += '<option value="Dermatology">Dermatolog
-        html += '<option value="Pediatrics">Pediatr
+        html += '<option value="Cardiology">Cardiologia</option>';
+        html += '<option value="Endocrinology">Endocrinologia</option>';
+        html += '<option value="Pulmonology">Neumologia</option>';
+        html += '<option value="Dermatology">Dermatologia</option>';
+        html += '<option value="Pediatrics">Pediatria</option>';
         html += '<option value="Other">Otra</option>';
         html += '</select>';
         html += '</div>';
@@ -482,7 +484,7 @@
         html += '<div style="display: grid; grid-template-columns: 1fr 1fr; gap: 15px;">';
         
         html += '<div class="form-group">';
-        html += '<label>Tel
+        html += '<label>Telefono</label>';
         html += '<input type="tel" id="doctorPhone" class="form-control">';
         html += '</div>';
         
@@ -550,11 +552,11 @@
             html += `<option value="General Medicine" ${d.Specialty === 'General Medicine' ? 'selected' : ''}>Medicina General</option>`;
             html += `<option value="Family Medicine" ${d.Specialty === 'Family Medicine' ? 'selected' : ''}>Medicina Familiar</option>`;
             html += `<option value="Internal Medicine" ${d.Specialty === 'Internal Medicine' ? 'selected' : ''}>Medicina Interna</option>`;
-            html += `<option value="Cardiology" ${d.Specialty === 'Cardiology' ? 'selected' : ''}>Cardiolog
-            html += `<option value="Endocrinology" ${d.Specialty === 'Endocrinology' ? 'selected' : ''}>Endocrinolog
-            html += `<option value="Pulmonology" ${d.Specialty === 'Pulmonology' ? 'selected' : ''}>Neumolog
-            html += `<option value="Dermatology" ${d.Specialty === 'Dermatology' ? 'selected' : ''}>Dermatolog
-            html += `<option value="Pediatrics" ${d.Specialty === 'Pediatrics' ? 'selected' : ''}>Pediatr
+            html += `<option value="Cardiology" ${d.Specialty === 'Cardiology' ? 'selected' : ''}>Cardiologia</option>`;
+            html += `<option value="Endocrinology" ${d.Specialty === 'Endocrinology' ? 'selected' : ''}>Endocrinologia</option>`;
+            html += `<option value="Pulmonology" ${d.Specialty === 'Pulmonology' ? 'selected' : ''}>Neumologia</option>`;
+            html += `<option value="Dermatology" ${d.Specialty === 'Dermatology' ? 'selected' : ''}>Dermatologia</option>`;
+            html += `<option value="Pediatrics" ${d.Specialty === 'Pediatrics' ? 'selected' : ''}>Pediatria</option>`;
             html += `<option value="Other" ${d.Specialty === 'Other' ? 'selected' : ''}>Otra</option>`;
             html += '</select>';
             html += '</div>';
@@ -562,7 +564,7 @@
             html += '<div style="display: grid; grid-template-columns: 1fr 1fr; gap: 15px;">';
             
             html += '<div class="form-group">';
-            html += '<label>Tel
+            html += '<label>Telefono</label>';
             html += `<input type="tel" id="doctorPhone" class="form-control" value="${escHtml(d.Phone || '')}">`;
             html += '</div>';
             
@@ -675,7 +677,7 @@
     
     window.addInsurancePartnership = function(doctorId) {
         if (insuranceProviders.length === 0) {
-            alert('  No hay proveedores de seguro disponibles');
+            alert('No hay proveedores de seguro disponibles');
             return;
         }
         
@@ -819,13 +821,13 @@
         html += '</div>';
         
         html += '<div class="form-group">';
-        html += '<label>Descuento M (</label>';
+        html += '<label>Descuento Maximo (CRC)</label>';
         html += `<input type="number" id="maximumDiscount" class="form-control" min="0" step="0.01" value="${maxDiscount || ''}">`;
-        html += '<small style="color: #666;">L m del descuento (dejar vac para sin l
+        html += '<small style="color: #666;">Limite del descuento (dejar vacio para sin limite)</small>';
         html += '</div>';
         
         html += '<div class="form-group">';
-        html += '<label>Descripci
+        html += '<label>Descripcion</label>';
         html += '<textarea id="discountDescription" class="form-control" rows="2"></textarea>';
         html += '</div>';
         
@@ -946,6 +948,7 @@
         return new Intl.NumberFormat('es-CR', {
             style: 'currency',
             currency: 'CRC',
+            currencyDisplay: 'code',
             minimumFractionDigits: 0,
             maximumFractionDigits: 0
         }).format(amount);

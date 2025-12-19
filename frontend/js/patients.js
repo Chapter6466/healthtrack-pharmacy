@@ -335,15 +335,15 @@
                     console.log(' Loaded', allProducts.length, 'products');
                 } else {
                     allProducts = [];
-                    console.warn('  No products found or invalid response');
+                    console.warn('No products found or invalid response');
                 }
             } else {
                 allProducts = [];
-                console.warn('  Products endpoint failed');
+                console.warn('Products endpoint failed');
             }
         } catch (e) { 
             allProducts = [];
-            console.warn('  Products not loaded:', e); 
+            console.warn('Products not loaded:', e); 
         }
         
         try {
@@ -420,7 +420,7 @@
             
         } catch (error) {
             console.error(' Error loading patients:', error);
-            alert('Error al cargar pacientes. Por favor recarga la p
+            alert('Error al cargar pacientes. Por favor recarga la pagina.');
         }
     }
     
@@ -464,12 +464,12 @@
             return;
         }
         
-        let html = '<table class="table" style="width: 100%; background: white; border-radius: 8px; overflow: hidden;">';
+        let html = '<table class="table table-sticky" style="width: 100%; background: white; border-radius: 8px; overflow: hidden;">';
         html += '<thead><tr>';
         html += '<th>Nombre</th>';
         html += '<th>Documento</th>';
         html += '<th>Fecha Nac.</th>';
-        html += '<th>Tel
+        html += '<th>Telefono</th>';
         html += '<th>Acciones</th>';
         html += '</tr></thead><tbody>';
         
@@ -479,10 +479,10 @@
             html += `<td>${escHtml(p.DocumentID)}</td>`;
             html += `<td>${fmtDate(p.BirthDate)}</td>`;
             html += `<td>${escHtml(p.Phone || p.PhoneNumber || 'N/A')}</td>`;
-            html += `<td>`;
-            html += `<button class="btn btn-sm btn-primary" onclick="window.viewPat(${p.PatientID})" title="Ver detalles"> `;
-            html += `<button class="btn btn-sm btn-warning" onclick="window.editPat(${p.PatientID})" title="Editar"> `;
-            html += `<button class="btn btn-sm btn-danger" onclick="window.deletePat(${p.PatientID})" title="Desactivar">
+            html += `<td class="action-cell">`;
+            html += `<button class="btn btn-sm btn-info btn-icon" onclick="window.viewPat(${p.PatientID})" title="Ver detalles" aria-label="Ver detalles"><i class="fa-solid fa-eye"></i></button> `;
+            html += `<button class="btn btn-sm btn-warning btn-icon" onclick="window.editPat(${p.PatientID})" title="Editar" aria-label="Editar"><i class="fa-solid fa-pen"></i></button> `;
+            html += `<button class="btn btn-sm btn-danger btn-icon" onclick="window.deletePat(${p.PatientID})" title="Desactivar" aria-label="Desactivar"><i class="fa-solid fa-ban"></i></button>`;
             html += `</td>`;
             html += '</tr>';
         });
@@ -506,13 +506,13 @@
         
         let html = '<div style="background: white; border-radius: 8px; padding: 20px;">';
         html += '<h3 style="color: #d9534f; margin-bottom: 20px;"> Pacientes Desactivados</h3>';
-        html += '<table class="table">';
+        html += '<table class="table table-sticky">';
         html += '<thead><tr>';
         html += '<th>Nombre</th>';
         html += '<th>Documento</th>';
         html += '<th>Desactivado el</th>';
         html += '<th>Desactivado por</th>';
-        html += '<th>Raz
+        html += '<th>Razon</th>';
         html += '<th>Acciones</th>';
         html += '</tr></thead><tbody>';
         
@@ -522,9 +522,9 @@
             html += `<td>${escHtml(p.DocumentID)}</td>`;
             html += `<td>${fmtDateTime(p.DeactivatedAt)}</td>`;
             html += `<td>${escHtml(p.DeactivatedByName || 'N/A')}</td>`;
-            html += `<td style="max-width: 300px;">${escHtml(p.DeactivationReason || 'Sin raz
+            html += `<td style="max-width: 300px;">${escHtml(p.DeactivationReason || 'Sin razon')}</td>`;
             html += `<td>`;
-            html += `<button class="btn btn-sm btn-success" onclick="window.reactivatePat(${p.PatientID})" title="Reactivar">¸ Reactivar</button>`;
+            html += `<button class="btn btn-sm btn-success" onclick="window.reactivatePat(${p.PatientID})" title="Reactivar">Reactivar</button>`;
             html += `</td>`;
             html += '</tr>';
         });
@@ -575,11 +575,11 @@
             html += '<div style="background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); color: white; padding: 20px; border-radius: 8px; margin-bottom: 20px;">';
             html += `<h3 style="margin: 0 0 10px 0;">${escHtml(p.FullName)}</h3>`;
             html += `<p style="margin: 5px 0;"><strong>Documento:</strong> ${escHtml(p.DocumentID)}</p>`;
-            html += `<p style="margin: 5px 0;"><strong>Fecha Nac:</strong> ${fmtDate(p.BirthDate)} (${calculateAge(p.BirthDate)} a
+            html += `<p style="margin: 5px 0;"><strong>Fecha Nac:</strong> ${fmtDate(p.BirthDate)} (${calculateAge(p.BirthDate)} anos)</p>`;
             html += `<p style="margin: 5px 0;"><strong>Sexo:</strong> ${formatGender(p.Gender)}</p>`;
-            html += `<p style="margin: 5px 0;"><strong>Tel ${escHtml(p.Phone || p.PhoneNumber || 'N/A')}</p>`;
+            html += `<p style="margin: 5px 0;"><strong>Tel:</strong> ${escHtml(p.Phone || p.PhoneNumber || 'N/A')}</p>`;
             html += `<p style="margin: 5px 0;"><strong>Email:</strong> ${escHtml(p.Email || 'N/A')}</p>`;
-            html += `<p style="margin: 5px 0;"><strong>Direcci ${escHtml(p.Address || 'N/A')}</p>`;
+            html += `<p style="margin: 5px 0;"><strong>Direccion:</strong> ${escHtml(p.Address || 'N/A')}</p>`;
             html += '</div>';
             
             // Insurance Section
@@ -589,12 +589,12 @@
             html += '</h4>';
 
             if (ins.length > 0) {
-                html += '<table class="table" style="background: white; margin-top: 10px;">';
-                html += '<thead><tr><th>Aseguradora</th><th>P
+                html += '<table class="table table-sticky" style="background: white; margin-top: 10px;">';
+                html += '<thead><tr><th>Aseguradora</th><th>Poliza</th><th>Vigencia</th><th>Estado</th><th>Acciones</th></tr></thead>';
                 html += '<tbody>';
                 ins.forEach(insurance => {
                     const effectiveFrom = insurance.EffectiveFrom ? fmtDate(insurance.EffectiveFrom) : '-';
-                    const effectiveTo = insurance.EffectiveTo ? fmtDate(insurance.EffectiveTo) : ';
+                    const effectiveTo = insurance.EffectiveTo ? fmtDate(insurance.EffectiveTo) : '-';
                     const vigencia = `${effectiveFrom} - ${effectiveTo}`;
                     
                     const isActive = insurance.IsActive === 1 || insurance.IsActive === true;
@@ -626,16 +626,16 @@
                     html += `<td style="white-space: nowrap;">`;
                     
                     if (isActive) {
-                        html += `<button class="btn btn-sm btn-warning" onclick="window.editIns(${insurance.PatientInsuranceID}, ${id})"> `;
+                        html += `<button class="btn btn-sm btn-warning" onclick="window.editIns(${insurance.PatientInsuranceID}, ${id})">Editar</button> `;
                         
                         if (canDelete) {
-                            html += `<button class="btn btn-sm btn-danger" onclick="window.deleteIns(${insurance.PatientInsuranceID}, ${id})">
+                            html += `<button class="btn btn-sm btn-danger" onclick="window.deleteIns(${insurance.PatientInsuranceID}, ${id})">Eliminar</button>`;
                         } else {
-                            html += `<button class="btn btn-sm btn-secondary" disabled title="No se puede eliminar">
+                            html += `<button class="btn btn-sm btn-secondary" disabled title="No se puede eliminar">Bloqueado</button>`;
                         }
                     } else {
-                        html += `<button class="btn btn-sm btn-secondary" disabled title="Inactivo"> `;
-                        html += `<button class="btn btn-sm btn-secondary" disabled title="Inactivo">
+                        html += `<button class="btn btn-sm btn-secondary" disabled title="Inactivo">Inactivo</button> `;
+                        html += `<button class="btn btn-sm btn-secondary" disabled title="Inactivo">Inactivo</button>`;
                     }
                     
                     html += `</td>`;
@@ -655,7 +655,7 @@
             
             if (prescriptions.length > 0) {
                 html += '<div style="max-height: 400px; overflow-y: auto;">';
-                html += '<table class="table table-sm" style="background: white; margin-top: 10px;">';
+                html += '<table class="table table-sm table-sticky" style="background: white; margin-top: 10px;">';
                 html += '<thead><tr><th>Medicamento</th><th>Dosis</th><th>Frecuencia</th><th>Requerido</th><th> Retiro</th><th>Renovaciones</th><th>Acciones</th></tr></thead>';
                 html += '<tbody>';
                 prescriptions.forEach(rx => {
@@ -692,7 +692,7 @@
             
             if (purchaseHistory && purchaseHistory.length > 0) {
                 const totalSpent = purchaseHistory.reduce((sum, sale) => sum + parseFloat(sale.TotalAmount || 0), 0);
-                html += '<table class="table table-sm" style="background: white; margin-top: 10px;">';
+                html += '<table class="table table-sm table-sticky" style="background: white; margin-top: 10px;">';
                 html += '<thead><tr><th>Fecha</th><th>Productos</th><th>Total</th></tr></thead>';
                 html += '<tbody>';
                 purchaseHistory.forEach(sale => {
@@ -787,7 +787,7 @@
             html += '</div>';
             
             html += '<div class="form-group" style="margin-bottom: 15px;">';
-            html += '<label style="display: block; margin-bottom: 5px; font-weight: bold;">Tel
+            html += '<label style="display: block; margin-bottom: 5px; font-weight: bold;">Telefono</label>';
             html += `<input type="tel" id="editPhone" class="form-control" value="${escHtml(p.Phone || p.PhoneNumber || '')}" style="width: 100%; padding: 8px; border: 1px solid #ddd; border-radius: 4px;">`;
             html += '</div>';
             
@@ -799,7 +799,7 @@
             html += '</div>';
             
             html += '<div class="form-group" style="margin-bottom: 15px;">';
-            html += '<label style="display: block; margin-bottom: 5px; font-weight: bold;">Direcci
+            html += '<label style="display: block; margin-bottom: 5px; font-weight: bold;">Direccion</label>';
             html += `<textarea id="editAddr" class="form-control" rows="2" style="width: 100%; padding: 8px; border: 1px solid #ddd; border-radius: 4px;">${escHtml(p.Address || '')}</textarea>`;
             html += '</div>';
             
@@ -875,7 +875,7 @@
         let html = '<form onsubmit="window.confirmDeactivation(event, ' + id + ')" style="max-width: 600px; margin: 0 auto;">';
         
         html += '<div class="alert alert-warning" style="background: #fff3cd; border-left: 4px solid #ffc107; padding: 15px; margin-bottom: 20px;">';
-        html += '<p style="margin: 0; font-size: 14px;">  <strong>Atenci Est a punto de desactivar a <strong>' + patientName + '</strong>.</p>';
+        html += '<p style="margin: 0; font-size: 14px;"><strong>Atencion:</strong> Esta a punto de desactivar a <strong>' + patientName + '</strong>.</p>';
         html += '<p style="margin: 10px 0 0 0; font-size: 13px;">Esta acci quedar registrada en el sistema de auditor con su usuario y la fecha/hora actual.</p>';
         html += '</div>';
         
@@ -899,7 +899,7 @@
         
         html += '</form>';
         
-        showModal('  Desactivar Paciente', html, '650px');
+        showModal('Desactivar Paciente', html, '650px');
     };
     
     window.confirmDeactivation = async function(event, id) {
@@ -982,7 +982,7 @@
         html += '</div>';
         
         html += '<div class="form-group" style="margin-bottom: 15px;">';
-        html += '<label style="display: block; margin-bottom: 5px; font-weight: bold;">Tel
+        html += '<label style="display: block; margin-bottom: 5px; font-weight: bold;">Telefono</label>';
         html += '<input type="tel" id="newPhone" class="form-control" style="width: 100%; padding: 8px; border: 1px solid #ddd; border-radius: 4px;">';
         html += '</div>';
         
@@ -994,7 +994,7 @@
         html += '</div>';
         
         html += '<div class="form-group" style="margin-bottom: 15px;">';
-        html += '<label style="display: block; margin-bottom: 5px; font-weight: bold;">Direcci
+        html += '<label style="display: block; margin-bottom: 5px; font-weight: bold;">Direccion</label>';
         html += '<textarea id="newAddr" class="form-control" rows="2" style="width: 100%; padding: 8px; border: 1px solid #ddd; border-radius: 4px;"></textarea>';
         html += '</div>';
         
@@ -1113,7 +1113,7 @@ console.log(' Patients module loaded - Part 2/2 (CRUD operations)');
     // Add insurance
     window.addIns = function(patientId) {
         if (!insuranceProviders || insuranceProviders.length === 0) {
-            alert('  No hay proveedores de seguro disponibles en el sistema');
+            alert('No hay proveedores de seguro disponibles en el sistema');
             return;
         }
         
@@ -1361,12 +1361,12 @@ console.log(' Patients module loaded - Part 2/2 (CRUD operations)');
     // Add prescription (FIXED)
     window.addRx = function(patientId) {
         if (!allProducts || allProducts.length === 0) {
-            alert('  No hay productos disponibles para recetar.\n\nPor favor, agregue productos al inventario primero.');
+            alert('No hay productos disponibles para recetar.\n\nPor favor, agregue productos al inventario primero.');
             return;
         }
         
         if (!prescribers || prescribers.length === 0) {
-            alert('  No hay doctores prescriptores disponibles.\n\nPor favor, agregue prescriptores al sistema primero.');
+            alert('No hay doctores prescriptores disponibles.\n\nPor favor, agregue prescriptores al sistema primero.');
             return;
         }
         
@@ -1435,7 +1435,7 @@ console.log(' Patients module loaded - Part 2/2 (CRUD operations)');
         html += '</div>';
         
         html += '<div style="background: #d1ecf1; border-left: 4px solid #0c5460; padding: 15px; border-radius: 4px; margin-bottom: 20px;">';
-        html += '<p style="margin: 0; font-size: 13px; color: #0c5460;"><strong>¸ Informaci Esta receta quedar registrada como "Activa" y aparecer en el perfil del paciente. Puede editarla o cancelarla despu si es necesario.</p>';
+        html += '<p style="margin: 0; font-size: 13px; color: #0c5460;"><strong>Nota:</strong> Esta receta quedara registrada como \"Activa\" y aparecera en el perfil del paciente. Puede editarla o cancelarla despues si es necesario.</p>';
         html += '</div>';
         
         html += '<div style="text-align: center; margin-top: 30px;">';
@@ -1445,7 +1445,7 @@ console.log(' Patients module loaded - Part 2/2 (CRUD operations)');
         
         html += '</form>';
         
-        showModal(' Nueva Receta M html, '750px');
+        showModal('Nueva Receta', html, '750px');
     };
     
     // Save prescription
@@ -1774,6 +1774,7 @@ console.log(' Patients module loaded - Part 2/2 (CRUD operations)');
         return new Intl.NumberFormat('es-CR', {
             style: 'currency',
             currency: 'CRC',
+            currencyDisplay: 'code',
             minimumFractionDigits: 0,
             maximumFractionDigits: 0
         }).format(amount);

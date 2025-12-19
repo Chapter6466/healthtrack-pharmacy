@@ -26,7 +26,7 @@ async function initInventory() {
         await loadInventory();
     } catch (error) {
         console.error('Init inventory error:', error);
-        showToast('Error al inicializar p 'danger');
+        showToast('Error al inicializar pagina', 'danger');
     }
 }
 
@@ -228,18 +228,18 @@ function displayInventory() {
                             <td>${formatCurrency(item.UnitPrice || 0)}</td>
                             <td>${getStockStatusBadge(item.StockStatus)}</td>
                             <td>${item.ExpiryDate ? formatDate(item.ExpiryDate) : 'N/A'}</td>
-                            <td>
-                                <button class="btn btn-sm btn-info" onclick="viewProductDetails(${item.ProductID})" title="Ver detalles">
-                                    
+                            <td class="action-cell">
+                                <button class="btn btn-sm btn-info btn-icon" onclick="viewProductDetails(${item.ProductID})" title="Ver detalles" aria-label="Ver detalles">
+                                    <i class="fa-solid fa-eye"></i>
                                 </button>
-                                <button class="btn btn-sm btn-warning" onclick="editProduct(${item.ProductID})" title="Editar">
-                                    
+                                <button class="btn btn-sm btn-warning btn-icon" onclick="editProduct(${item.ProductID})" title="Editar" aria-label="Editar">
+                                    <i class="fa-solid fa-pen"></i>
                                 </button>
-                                <button class="btn btn-sm btn-primary" onclick="adjustStock(${item.ProductID}, ${item.BatchID}, ${item.WarehouseID}, ${item.LocationID})" title="Ajustar stock">
-                                    
+                                <button class="btn btn-sm btn-primary btn-icon" onclick="adjustStock(${item.ProductID}, ${item.BatchID}, ${item.WarehouseID}, ${item.LocationID})" title="Ajustar stock" aria-label="Ajustar stock">
+                                    <i class="fa-solid fa-boxes-stacked"></i>
                                 </button>
-                                <button class="btn btn-sm btn-danger" onclick="deleteProduct(${item.ProductID}, '${escapeHtml(item.ProductName)}')" title="Eliminar">
-                                    
+                                <button class="btn btn-sm btn-danger btn-icon" onclick="deleteProduct(${item.ProductID}, '${escapeHtml(item.ProductName)}')" title="Eliminar" aria-label="Eliminar">
+                                    <i class="fa-solid fa-ban"></i>
                                 </button>
                             </td>
                         </tr>
@@ -256,7 +256,7 @@ function displayInventory() {
 // Get stock status badge
 function getStockStatusBadge(status) {
     const badges = {
-        'CRITICAL': '<span class="badge badge-danger"> Cr
+        'CRITICAL': '<span class="badge badge-danger"> Critico</span>',
         'LOW': '<span class="badge badge-warning"> Bajo</span>',
         'NORMAL': '<span class="badge badge-success"> Normal</span>',
         'OVERSTOCK': '<span class="badge badge-info"> Exceso</span>'
@@ -569,10 +569,10 @@ function updateAdjustmentPreview(currentQuantity) {
     // Show warning if result would be negative
     if (newQuantity < 0) {
         warningClass = 'background: #f8d7da; color: #721c24;';
-        previewText.innerHTML = ` <strong>ERROR:</strong> ${currentQuantity}  ${newQuantity} unidades<br>No hay suficiente stock para esta operaci
+        previewText.innerHTML = `<strong>ERROR:</strong> Stock actual ${currentQuantity}, resultado ${newQuantity} unidades.<br>No hay suficiente stock para esta operacion.`;
     } else {
         warningClass = 'background: #d4edda; color: #155724;';
-        previewText.innerHTML = ` Nuevo stock: ${currentQuantity}  <strong>${newQuantity}</strong> unidades`;
+        previewText.innerHTML = `Nuevo stock: <strong>${newQuantity}</strong> (actual ${currentQuantity}) unidades`;
     }
     
     preview.style.display = 'block';
@@ -598,9 +598,9 @@ async function saveStockAdjustment(event, productId, batchId, warehouseId, locat
             newQuantity = quantity;
         }
         
-        // Check if result would be negative
-        if (newQuantity < 0) {
-            showToast(` Stock insuficiente. Stock actual: ${currentQuantity} unidades. No se puede realizar esta operaci 'danger');
+    // Check if result would be negative
+    if (newQuantity < 0) {
+            showToast(`Stock insuficiente. Stock actual: ${currentQuantity} unidades. No se puede realizar esta operacion.`, 'danger');
             return;
         }
         
@@ -701,8 +701,8 @@ function deleteProduct(productId, productName) {
             </div>
             <div class="modal-body">
                 <div style="background: #fff3cd; border: 1px solid #ffc107; padding: 15px; border-radius: 5px; margin-bottom: 20px;">
-                    <strong>  ADVERTENCIA</strong><br>
-                    t seguro que desea eliminar este producto?<br>
+                    <strong>ADVERTENCIA</strong><br>
+                    Esta seguro que desea eliminar este producto?<br>
                     <strong style="font-size: 1.1em; color: #dc3545;">${escapeHtml(productName)}</strong>
                 </div>
                 

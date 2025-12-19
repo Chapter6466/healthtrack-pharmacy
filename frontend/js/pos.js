@@ -11,6 +11,13 @@
   let availableProducts = [];
   let allPatients = [];
   let selectedPatient = null;
+  const currencyFormatter = new Intl.NumberFormat('es-CR', {
+    style: 'currency',
+    currency: 'CRC',
+    currencyDisplay: 'code',
+    minimumFractionDigits: 2,
+    maximumFractionDigits: 2
+  });
 
   // -----------------------------
   // INIT
@@ -198,7 +205,7 @@
     if (percentage >= 150) return 'Excelente';
     if (percentage >= 100) return 'Bueno';
     if (percentage >= 50) return 'Bajo';
-    return 'Cr
+    return 'Critico';
   }
 
   // -----------------------------
@@ -453,7 +460,7 @@
     if (!cartItems) return;
 
     if (cart.length === 0) {
-      cartItems.innerHTML = '<p class="text-muted text-center" style="margin-top: 50px;">El carrito est vac
+      cartItems.innerHTML = '<p class="text-muted text-center" style="margin-top: 50px;">El carrito esta vacio</p>';
       if (checkoutBtn) checkoutBtn.disabled = true;
       updateTotals(0, 0, 0, 0);
       return;
@@ -501,7 +508,7 @@
   window.updateCartQuantity = function (index, newQuantity) {
     const qty = parseInt(newQuantity, 10);
     if (!Number.isFinite(qty) || qty < 1 || qty > cart[index].maxStock) {
-      showToast('Cantidad inv 'warning');
+      showToast('Cantidad invalida', 'warning');
       updateCartDisplay();
       return;
     }
@@ -766,7 +773,9 @@
     if (!logoutBtn) return;
 
     logoutBtn.addEventListener('click', async () => {
-      if (!confirm('rrar sesi return;
+      if (!confirm('Seguro que desea cerrar sesion?')) {
+        return;
+      }
       try {
         await fetch('/api/auth/logout', { method: 'POST', credentials: 'include' });
       } catch (e) {
@@ -788,8 +797,8 @@
 
   function fmtCurrency(amount) {
     const n = Number(amount);
-    if (!Number.isFinite(n)) return '.00';
-    return ' + n.toLocaleString('es-CR', { minimumFractionDigits: 2, maximumFractionDigits: 2 });
+    if (!Number.isFinite(n)) return currencyFormatter.format(0);
+    return currencyFormatter.format(n);
   }
 
   function showToast(message, type = 'info') {

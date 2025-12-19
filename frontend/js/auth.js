@@ -1,24 +1,24 @@
 // Login functionality
-console.log('✅ Auth.js loaded');
+console.log('Auth.js loaded');
 
 document.addEventListener('DOMContentLoaded', () => {
-    console.log('✅ DOM loaded, setting up login form');
+    console.log('DOM loaded, setting up login form');
     
     const loginForm = document.getElementById('loginForm');
     
     if (!loginForm) {
-        console.error('❌ Login form not found!');
+        console.error('Login form not found!');
         return;
     }
     
-    console.log('✅ Login form found');
+    console.log('Login form found');
     
     const errorMessage = document.getElementById('errorMessage');
     const loadingSpinner = document.getElementById('loadingSpinner');
 
     loginForm.addEventListener('submit', async (e) => {
         e.preventDefault();
-        console.log('✅ Form submitted');
+        console.log('Form submitted');
 
         const username = document.getElementById('username').value.trim();
         const password = document.getElementById('password').value.trim();
@@ -26,16 +26,15 @@ document.addEventListener('DOMContentLoaded', () => {
         console.log('Username entered:', username);
 
         if (!username || !password) {
-            showError('Por favor ingrese usuario y contraseña');
+            showError('Por favor ingrese usuario y contrasena');
             return;
         }
 
-        // Show loading
         if (loadingSpinner) loadingSpinner.style.display = 'block';
         if (errorMessage) errorMessage.style.display = 'none';
 
         try {
-            console.log('🔄 Sending login request to /api/auth/login');
+            console.log('Sending login request to /api/auth/login');
             
             const response = await fetch('/api/auth/login', {
                 method: 'POST',
@@ -46,22 +45,22 @@ document.addEventListener('DOMContentLoaded', () => {
                 body: JSON.stringify({ username, password })
             });
 
-            console.log('📥 Response received. Status:', response.status);
+            console.log('Response received. Status:', response.status);
 
             const data = await response.json();
-            console.log('📦 Response data:', data);
+            console.log('Response data:', data);
 
             if (data.success) {
-                console.log('✅ Login successful! Redirecting to dashboard...');
+                console.log('Login successful! Redirecting to dashboard...');
                 sessionStorage.setItem('user', JSON.stringify(data.user));
                 window.location.href = '/dashboard.html';
             } else {
-                console.log('❌ Login failed:', data.message);
-                showError(data.message || 'Usuario o contraseña incorrectos');
+                console.log('Login failed:', data.message);
+                showError(data.message || 'Usuario o contrasena incorrectos');
             }
         } catch (error) {
-            console.error('❌ Login error:', error);
-            showError('Error de conexión. Verifique que el servidor esté corriendo.');
+            console.error('Login error:', error);
+            showError('Error de conexion. Verifique que el servidor este corriendo.');
         } finally {
             if (loadingSpinner) loadingSpinner.style.display = 'none';
         }
