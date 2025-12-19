@@ -132,13 +132,13 @@ async function loadInvoices() {
     if (tbody) {
         const skeletonRows = Array.from({ length: 6 }).map(() => `
             <tr>
-                <td><span class="skeleton-line w-80"></span></td>
+                <td data-label="Producto"><span class="skeleton-line w-80"></span></td>
+                <td data-label="Precio Unit."><span class="skeleton-line w-60"></span></td>
+                <td data-label="Total L"><span class="skeleton-line w-60"></span></td>
                 <td><span class="skeleton-line w-60"></span></td>
-                <td><span class="skeleton-line w-60"></span></td>
-                <td><span class="skeleton-line w-60"></span></td>
-                <td><span class="skeleton-line w-40"></span></td>
-                <td><span class="skeleton-line w-40"></span></td>
-                <td><span class="skeleton-line w-40"></span></td>
+                <td data-label="Cantidad"><span class="skeleton-line w-40"></span></td>
+                <td data-label="Descuento"><span class="skeleton-line w-40"></span></td>
+                <td data-label="Reembolso"><span class="skeleton-line w-40"></span></td>
                 <td><span class="skeleton-line w-40"></span></td>
                 <td><span class="skeleton-line w-40"></span></td>
             </tr>
@@ -292,6 +292,38 @@ function clearInvoiceFilters() {
 // ============================================
 
 window.viewInvoice = async function(invoiceId) {
+    // Show temporary skeleton modal while fetching details
+    const skeletonBody = `
+        <div class="table-wrapper">
+        <table class="table table-sm table-sticky">
+            <thead>
+                <tr>
+                    <th>Producto</th>
+                    <th>Cantidad</th>
+                    <th>Precio Unit.</th>
+                    <th>Descuento</th>
+                    <th>Total L</th>
+                    <th>Reembolso</th>
+                </tr>
+            </thead>
+            <tbody>
+                ${Array.from({ length: 4 }).map(() => `
+                    <tr>
+                        <td data-label="Producto"><span class="skeleton-line w-80"></span></td>
+                        <td><span class="skeleton-line w-40"></span></td>
+                        <td><span class="skeleton-line w-60"></span></td>
+                        <td><span class="skeleton-line w-40"></span></td>
+                        <td><span class="skeleton-line w-60"></span></td>
+                        <td><span class="skeleton-line w-40"></span></td>
+                    </tr>
+                `).join('')}
+            </tbody>
+        </table>
+        </div>
+        <p class="text-muted" style="padding-top:10px;">Cargando detalles...</p>
+    `;
+    showModal('Factura #' + invoiceId, skeletonBody, '700px');
+
     try {
         const response = await fetch(`/api/invoices/${invoiceId}`, {
             credentials: 'include'
@@ -375,8 +407,8 @@ function showInvoiceDetailsModal(invoice, items, refunds) {
         </div>
 
         <h4>Items de la Factura</h4>
-        <div class="table-wrapper">
-            <table class="table table-sm table-sticky">
+        <div class="table-wrapper table-responsive-card">
+            <table class="table table-sm table-sticky table-responsive-card">
                 <thead>
                     <tr>
                         <th>Producto</th>

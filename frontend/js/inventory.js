@@ -123,7 +123,7 @@ async function loadInventory() {
 
     container.innerHTML = `
         <div class="table-wrapper">
-        <table class="table table-sticky">
+        <table class="table table-sticky table-responsive-card">
             <thead>
                 <tr>
                     <th>Producto</th>
@@ -305,15 +305,15 @@ function displayInventory() {
                 <tbody>
                     ${filteredData.map(item => `
                         <tr>
-                            <td><strong>${escapeHtml(item.ProductName || 'N/A')}</strong></td>
-                            <td>${escapeHtml(item.CategoryName || 'N/A')}</td>
-                            <td>${escapeHtml(item.BatchCode || 'N/A')}</td>
-                            <td><strong>${item.TotalQuantity || 0}</strong> ${escapeHtml(item.UnitSymbol || '')}</td>
-                            <td>${item.MinStock || 0} / ${item.MaxStock || 0}</td>
-                            <td>${formatCurrency(item.UnitPrice || 0)}</td>
-                            <td>${getStockStatusBadge(item.StockStatus)}</td>
-                            <td>${item.ExpiryDate ? formatDate(item.ExpiryDate) : 'N/A'}</td>
-                            <td class="action-cell">
+                            <td data-label="Producto"><strong>${escapeHtml(item.ProductName || 'N/A')}</strong></td>
+                            <td data-label="Categoria">${escapeHtml(item.CategoryName || 'N/A')}</td>
+                            <td data-label="Lote">${escapeHtml(item.BatchCode || 'N/A')}</td>
+                            <td data-label="Stock Actual"><strong>${item.TotalQuantity || 0}</strong> ${escapeHtml(item.UnitSymbol || '')}</td>
+                            <td data-label="Min/Max">${item.MinStock || 0} / ${item.MaxStock || 0}</td>
+                            <td data-label="Precio">${formatCurrency(item.UnitPrice || 0)}</td>
+                            <td data-label="Estado">${getStockStatusBadge(item.StockStatus)}</td>
+                            <td data-label="Vencimiento">${item.ExpiryDate ? formatDate(item.ExpiryDate) : 'N/A'}</td>
+                            <td class="action-cell" data-label="Acciones">
                                 <button class="btn btn-sm btn-info btn-icon" onclick="viewProductDetails(${item.ProductID})" title="Ver detalles" aria-label="Ver detalles">
                                     <i class="fa-solid fa-eye"></i>
                                 </button>

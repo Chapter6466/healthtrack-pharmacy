@@ -89,52 +89,38 @@ function formatDateTime(dateString) {
     }).format(date);
 }
 
-// Show toast notification
+// Show toast notification (bottom-right, dismissible)
 function showToast(message, type = 'info') {
-    const toast = document.createElement('div');
-    toast.className = `alert alert-${type}`;
-    toast.textContent = message;
-    toast.style.position = 'fixed';
-    toast.style.top = '20px';
-    toast.style.right = '20px';
-    toast.style.zIndex = '10000';
-    toast.style.minWidth = '300px';
-    toast.style.animation = 'slideIn 0.3s ease';
-    
-    document.body.appendChild(toast);
-    
-    setTimeout(() => {
-        toast.style.animation = 'slideOut 0.3s ease';
-        setTimeout(() => toast.remove(), 300);
-    }, 3000);
-}
+    const containerId = 'toast-container';
+    let container = document.getElementById(containerId);
+    if (!container) {
+        container = document.createElement('div');
+        container.id = containerId;
+        container.className = 'toast-container';
+        container.setAttribute('aria-live', 'polite');
+        document.body.appendChild(container);
+    }
 
-// Add CSS for toast animations
-const style = document.createElement('style');
-style.textContent = `
-    @keyframes slideIn {
-        from {
-            transform: translateX(400px);
-            opacity: 0;
-        }
-        to {
-            transform: translateX(0);
-            opacity: 1;
-        }
-    }
-    
-    @keyframes slideOut {
-        from {
-            transform: translateX(0);
-            opacity: 1;
-        }
-        to {
-            transform: translateX(400px);
-            opacity: 0;
-        }
-    }
-`;
-document.head.appendChild(style);
+    const toast = document.createElement('div');
+    toast.className = `toast toast-${type}`;
+
+    const msg = document.createElement('span');
+    msg.textContent = message;
+
+    const closeBtn = document.createElement('button');
+    closeBtn.type = 'button';
+    closeBtn.setAttribute('aria-label', 'Cerrar notificacion');
+    closeBtn.textContent = '×';
+    closeBtn.addEventListener('click', () => toast.remove());
+
+    toast.appendChild(msg);
+    toast.appendChild(closeBtn);
+    container.appendChild(toast);
+
+    setTimeout(() => {
+        toast.remove();
+    }, 3800);
+}
 
 // Update current date display
 function updateCurrentDate() {

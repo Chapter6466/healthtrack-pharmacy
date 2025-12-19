@@ -470,7 +470,7 @@
             return;
         }
         
-        let html = '<div class="table-wrapper"><table class="table table-sticky" style="width: 100%; background: white; border-radius: 8px; overflow: hidden;">';
+        let html = '<div class="table-wrapper table-responsive-card"><table class="table table-sticky table-responsive-card" style="width: 100%; background: white; border-radius: 8px; overflow: hidden;">';
         html += '<thead><tr>';
         html += '<th>Nombre</th>';
         html += '<th>Documento</th>';
@@ -481,11 +481,11 @@
         
         patientsData.forEach(p => {
             html += '<tr>';
-            html += `<td><strong>${escHtml(p.FullName)}</strong></td>`;
-            html += `<td>${escHtml(p.DocumentID)}</td>`;
-            html += `<td>${fmtDate(p.BirthDate)}</td>`;
-            html += `<td>${escHtml(p.Phone || p.PhoneNumber || 'N/A')}</td>`;
-            html += `<td class="action-cell">`;
+            html += `<td data-label="Nombre"><strong>${escHtml(p.FullName)}</strong></td>`;
+            html += `<td data-label="Documento">${escHtml(p.DocumentID)}</td>`;
+            html += `<td data-label="Fecha Nac.">${fmtDate(p.BirthDate)}</td>`;
+            html += `<td data-label="Telefono">${escHtml(p.Phone || p.PhoneNumber || 'N/A')}</td>`;
+            html += `<td class="action-cell" data-label="Acciones">`;
             html += `<button class="btn btn-sm btn-info btn-icon" onclick="window.viewPat(${p.PatientID})" title="Ver detalles" aria-label="Ver detalles"><i class="fa-solid fa-eye"></i></button> `;
             html += `<button class="btn btn-sm btn-warning btn-icon" onclick="window.editPat(${p.PatientID})" title="Editar" aria-label="Editar"><i class="fa-solid fa-pen"></i></button> `;
             html += `<button class="btn btn-sm btn-danger btn-icon" onclick="window.deletePat(${p.PatientID})" title="Desactivar" aria-label="Desactivar"><i class="fa-solid fa-ban"></i></button>`;
@@ -514,7 +514,7 @@
         
         let html = '<div style="background: white; border-radius: 8px; padding: 20px;">';
         html += '<h3 style="color: #d9534f; margin-bottom: 20px;"> Pacientes Desactivados</h3>';
-        html += '<div class="table-wrapper"><table class="table table-sticky">';
+        html += '<div class="table-wrapper table-responsive-card"><table class="table table-sticky table-responsive-card">';
         html += '<thead><tr>';
         html += '<th>Nombre</th>';
         html += '<th>Documento</th>';
@@ -526,12 +526,12 @@
         
         deactivatedPatients.forEach(p => {
             html += '<tr>';
-            html += `<td><strong>${escHtml(p.FullName)}</strong></td>`;
-            html += `<td>${escHtml(p.DocumentID)}</td>`;
-            html += `<td>${fmtDateTime(p.DeactivatedAt)}</td>`;
-            html += `<td>${escHtml(p.DeactivatedByName || 'N/A')}</td>`;
-            html += `<td style="max-width: 300px;">${escHtml(p.DeactivationReason || 'Sin razon')}</td>`;
-            html += `<td class="action-cell">`;
+            html += `<td data-label="Nombre"><strong>${escHtml(p.FullName)}</strong></td>`;
+            html += `<td data-label="Documento">${escHtml(p.DocumentID)}</td>`;
+            html += `<td data-label="Desactivado el">${fmtDateTime(p.DeactivatedAt)}</td>`;
+            html += `<td data-label="Desactivado por">${escHtml(p.DeactivatedByName || 'N/A')}</td>`;
+            html += `<td data-label="Razon" style="max-width: 300px;">${escHtml(p.DeactivationReason || 'Sin razon')}</td>`;
+            html += `<td class="action-cell" data-label="Acciones">`;
             html += `<button class="btn btn-sm btn-success btn-icon" onclick="window.reactivatePat(${p.PatientID})" title="Reactivar" aria-label="Reactivar"><i class="fa-solid fa-circle-check"></i></button>`;
             html += `</td>`;
             html += '</tr>';

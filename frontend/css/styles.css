@@ -212,14 +212,23 @@ body {
 
 .card-header {
     border-bottom: 2px solid var(--light-gray);
-    padding-bottom: 15px;
-    margin-bottom: 20px;
+    padding: 12px 16px;
+    margin: -20px -20px 16px -20px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    gap: 10px;
 }
 
 .card-title {
     font-size: 18px;
     font-weight: 600;
-    color: white;
+    color: #1a3a5c;
+}
+
+.card-header .card-actions {
+    display: inline-flex;
+    gap: 8px;
 }
 
 /* Form Elements */
@@ -2219,6 +2228,49 @@ textarea:focus-visible {
 }
 
 
+
+.toast-container {
+    position: fixed;
+    bottom: 20px;
+    right: 20px;
+    z-index: 11000;
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+}
+
+.toast {
+    min-width: 280px;
+    max-width: 360px;
+    padding: 12px 14px;
+    border-radius: 8px;
+    box-shadow: 0 6px 16px rgba(0,0,0,0.18);
+    color: white;
+    font-size: 14px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    animation: slideIn 0.25s ease, fadeOut 0.3s ease 3.5s forwards;
+}
+
+.toast-info { background: #2196F3; }
+.toast-success { background: #2e7d32; }
+.toast-danger { background: #d32f2f; }
+.toast-warning { background: #ed6c02; }
+
+.toast button {
+    background: none;
+    border: none;
+    color: white;
+    cursor: pointer;
+    font-size: 16px;
+    padding: 0 4px;
+}
+
+@keyframes fadeOut {
+    to { opacity: 0; transform: translateY(6px); }
+}
+
 /* ========================================
    TABLE STYLES - CONSOLIDATED
    ======================================== */
@@ -2291,4 +2343,49 @@ textarea:focus-visible {
     padding: 12px;
     border-bottom: 1px solid #ddd;
     color: #333;
+}
+
+/* Responsive stacked cards for tables */
+@media (max-width: 768px) {
+    .table-responsive-card table,
+    .table-responsive-card thead,
+    .table-responsive-card tbody,
+    .table-responsive-card th,
+    .table-responsive-card td,
+    .table-responsive-card tr {
+        display: block;
+        width: 100%;
+    }
+
+    .table-responsive-card thead {
+        display: none;
+    }
+
+    .table-responsive-card tbody tr {
+        margin-bottom: 12px;
+        border: 1px solid #e0e0e0;
+        border-radius: 8px;
+        padding: 8px;
+        background: #fff;
+    }
+
+    .table-responsive-card td {
+        border: none;
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        padding: 8px 6px;
+    }
+
+    .table-responsive-card td::before {
+        content: attr(data-label);
+        font-weight: 600;
+        color: #1a3a5c;
+        margin-right: 10px;
+    }
+
+    .table-responsive-card .action-cell {
+        justify-content: flex-start;
+        gap: 8px;
+    }
 }

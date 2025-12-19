@@ -276,7 +276,7 @@
             return;
         }
         
-        let html = '<div class="table-wrapper"><table class="table table-sticky" style="width: 100%; background: white; border-radius: 8px; overflow: hidden;">';
+        let html = '<div class="table-wrapper table-responsive-card"><table class="table table-sticky table-responsive-card" style="width: 100%; background: white; border-radius: 8px; overflow: hidden;">';
         html += '<thead><tr>';
         html += '<th>Nombre</th>';
         html += '<th>Licencia</th>';
@@ -290,13 +290,13 @@
         
         doctorsData.forEach(d => {
             html += '<tr>';
-            html += `<td><strong>${escHtml(d.FullName)}</strong></td>`;
-            html += `<td>${escHtml(d.LicenseNumber)}</td>`;
-            html += `<td>${escHtml(d.Specialty)}</td>`;
-            html += `<td>${escHtml(d.Phone || 'N/A')}</td>`;
-            html += `<td>${escHtml(d.Email || 'N/A')}</td>`;
-            html += `<td><span class="badge badge-info">${d.InsuranceCount || 0}</span></td>`;
-            html += `<td><span class="badge badge-success">${d.PrescriptionCount || 0}</span></td>`;
+            html += `<td data-label="Nombre"><strong>${escHtml(d.FullName)}</strong></td>`;
+            html += `<td data-label="Licencia">${escHtml(d.LicenseNumber)}</td>`;
+            html += `<td data-label="Especialidad">${escHtml(d.Specialty)}</td>`;
+            html += `<td data-label="Telefono">${escHtml(d.Phone || 'N/A')}</td>`;
+            html += `<td data-label="Email">${escHtml(d.Email || 'N/A')}</td>`;
+            html += `<td data-label="Seguros"><span class="badge badge-info">${d.InsuranceCount || 0}</span></td>`;
+            html += `<td data-label="Recetas"><span class="badge badge-success">${d.PrescriptionCount || 0}</span></td>`;
             html += `<td class="action-cell" style="white-space: nowrap;">`;
             html += `<button class="btn btn-sm btn-info btn-icon" onclick="window.viewDoctor(${d.PrescriberID})" title="Ver detalles" aria-label="Ver detalles"><i class="fa-solid fa-eye"></i></button> `;
             html += `<button class="btn btn-sm btn-warning btn-icon" onclick="window.editDoctor(${d.PrescriberID})" title="Editar" aria-label="Editar"><i class="fa-solid fa-pen"></i></button> `;
@@ -403,7 +403,7 @@
             html += '</h4>';
             
             if (insurance.length > 0) {
-                html += '<div class="table-wrapper"><table class="table table-sticky" style="background: white; margin-top: 10px;">';
+                html += '<div class="table-wrapper table-responsive-card"><table class="table table-sticky table-responsive-card" style="background: white; margin-top: 10px;">';
                 html += '<thead><tr><th>Seguro</th><th>Contrato</th><th>Vigencia</th><th>Descuento</th><th>Acciones</th></tr></thead>';
                 html += '<tbody>';
                 insurance.forEach(ins => {
@@ -416,7 +416,7 @@
                     html += `<td><strong>${escHtml(ins.InsuranceName)}</strong></td>`;
                     html += `<td>${escHtml(ins.ContractNumber || 'N/A')}</td>`;
                     html += `<td>${vigencia}</td>`;
-                    html += `<td><span class="badge badge-success">${ins.DiscountPercentage || 0}%</span></td>`;
+                    html += `<td data-label="Recetas"><span class="badge badge-success">${ins.DiscountPercentage || 0}%</span></td>`;
                     html += `<td>`;
                     if (ins.IsActive) {
                         html += `<button class="btn btn-xs btn-danger" onclick="window.removeInsurancePartnership(${ins.PrescriberInsuranceID}, ${id})">Quitar</button>`;
@@ -980,7 +980,7 @@
         `).join('');
 
         return `
-            <div class="table-wrapper"><table class="table table-sticky" style="width: 100%; background: white; border-radius: 8px; overflow: hidden;">
+            <div class="table-wrapper table-responsive-card"><table class="table table-sticky table-responsive-card" style="width: 100%; background: white; border-radius: 8px; overflow: hidden;">
                 <thead><tr>
                     <th>Nombre</th>
                     <th>Licencia</th>
