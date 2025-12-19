@@ -9,8 +9,10 @@
 }
 
 :root {
-    --primary-color: #2C5F8D;
-    --primary-dark: #1a3a5c;
+    --primary-color: #2b2f33;
+    --primary-dark: #1f2327;
+    --sidebar-bg: #2b2f33;
+    --card-header-bg: #1a3a5c;
     --secondary-color: #4CAF50;
     --danger-color: #F44336;
     --warning-color: #FF9800;
@@ -24,7 +26,7 @@
 body {
     font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
     background: #f0f2f5;
-    color: white;
+    color: var(--text-dark);
     line-height: 1.6;
 }
 
@@ -218,6 +220,8 @@ body {
     justify-content: space-between;
     align-items: center;
     gap: 10px;
+    background: var(--card-header-bg);
+    color: white;
 }
 
 .card-title {
@@ -239,7 +243,7 @@ body {
 .form-group label {
     display: block;
     margin-bottom: 5px;
-    color: white;
+    color: var(--text-dark);
     font-weight: 500;
     font-size: 14px;
 }
@@ -413,21 +417,29 @@ textarea.form-control {
     justify-content: center;
     align-items: center;
     min-height: 100vh;
-    background: var(--primary-color);
+    background:
+      linear-gradient(140deg, rgba(43,47,51,0.92), rgba(26,58,92,0.85)),
+      url('https://images.unsplash.com/photo-1576091160399-112ba8d25d1d?auto=format&fit=crop&w=1600&q=80') center/cover;
+    background-attachment: fixed;
+    padding: 15px 20px 15px;
 }
 
 .login-container {
     width: 100%;
-    max-width: 420px;
-    padding: 20px;
+    max-width: 460px;
+    padding: 20px 12px 16px;
 }
 
 .login-card {
-    background: white;
-    border-radius: 12px;
-    padding: 40px;
-    box-shadow: 0 10px 40px rgba(0,0,0,0.2);
+    background: rgba(255, 255, 255, 0.96);
+    color: var(--text-dark);
+    border-radius: 14px;
+    padding: 38px;
+    box-shadow: 0 18px 45px rgba(0,0,0,0.25);
+    border: 1px solid rgba(255,255,255,0.45);
+    backdrop-filter: blur(6px);
 }
+
 
 .login-header {
     text-align: center;
@@ -435,13 +447,13 @@ textarea.form-control {
 }
 
 .login-header h1 {
-    color: var(--primary-color);
+    color: var(--primary-dark);
     margin-bottom: 10px;
     font-size: 28px;
 }
 
 .login-header p {
-    color: var(--text-light);
+    color: #4b5563;
     font-size: 14px;
 }
 
@@ -457,26 +469,26 @@ textarea.form-control {
 
 .test-credentials {
     margin-top: 25px;
-    padding: 15px;
-    background: rgba(255, 255, 255, 0.1);
-    color: white;
-    border-radius: 5px;
+    padding: 14px 16px;
+    background: #f5f7fb;
+    color: var(--primary-dark);
+    border-radius: 8px;
     font-size: 13px;
-    border: 1px solid rgba(255, 255, 255, 0.2);
+    border: 1px solid #e2e8f0;
 }
 
 .test-credentials p {
     margin: 5px 0;
-    color: white;
+    color: var(--primary-dark);
 }
 
 .test-credentials strong {
-    color: white;
+    color: var(--primary-dark);
 }
 
 .test-credentials code {
-    background: rgba(255, 255, 255, 0.9);
-    color: #1a3a5c;
+    background: #1a3a5c;
+    color: #fff;
     padding: 3px 8px;
     border-radius: 3px;
     font-family: 'Courier New', monospace;
@@ -497,7 +509,7 @@ textarea.form-control {
 /* Sidebar */
 .sidebar {
     width: 250px;
-    background: var(--primary-color);
+    background: var(--sidebar-bg);
     color: white;
     display: flex;
     flex-direction: column;
@@ -606,7 +618,7 @@ textarea.form-control {
 .page-title {
     font-size: 24px;
     font-weight: 600;
-    color: white;
+    color: var(--primary-dark);
 }
 
 .top-bar-actions {
@@ -677,7 +689,7 @@ textarea.form-control {
 .stat-details h3 {
     font-size: 28px;
     font-weight: 700;
-    color: white;
+    color: var(--primary-dark);
     margin-bottom: 5px;
 }
 
@@ -704,6 +716,7 @@ textarea.form-control {
     display: flex;
     justify-content: space-between;
     align-items: center;
+    color: var(--text-dark);
 }
 
 .alert-item.critical {
@@ -743,6 +756,17 @@ textarea.form-control {
 
 .search-bar input {
     flex: 1;
+}
+
+#searchBtn {
+    background: #1a3a5c;
+    color: #fff;
+    border: 1px solid #1a3a5c;
+}
+
+#searchBtn:hover:not(:disabled) {
+    background: #16304f;
+    border-color: #16304f;
 }
 
 .product-grid {
@@ -1217,7 +1241,7 @@ textarea.form-control {
 .stat-value {
     font-size: 28px;
     font-weight: bold;
-    color: white;
+    color: var(--primary-dark);
 }
 
 /* Top Bar */
@@ -1235,7 +1259,7 @@ textarea.form-control {
 }
 
 .card-header {
-    background: var(--primary-color);
+    background: var(--card-header-bg);
     color: white;
     padding: 20px;
     border-bottom: 3px solid var(--primary-dark);
@@ -1244,6 +1268,11 @@ textarea.form-control {
 .card-header h3 {
     margin: 0;
     font-size: 20px;
+    color: white;
+}
+
+.card-header .card-title {
+    color: white;
 }
 
 .card-body {
@@ -1520,19 +1549,19 @@ textarea.form-control {
 .page-header h1 {
     margin: 0 0 5px 0;
     font-size: 32px;
-    color: white;
+    color: var(--primary-dark);
 }
 
 .page-subtitle {
     margin: 0;
-    color: var(--text-light);
+    color: var(--primary-dark);
     font-size: 16px;
 }
 
 /* Sidebar Styles (if not already present) */
 .sidebar {
     width: 250px;
-    background: var(--primary-color);
+    background: var(--sidebar-bg);
     color: white;
     display: flex;
     flex-direction: column;
@@ -1899,8 +1928,11 @@ textarea.form-control {
 
 /* Logo Sizing */
 .logo-img {
-    width: 180px;
+    width: 100%;
+    max-width: 220px;
     height: auto;
+    display: block;
+    margin: 0 auto;
 }
 
 /* Custom Layout Classes */

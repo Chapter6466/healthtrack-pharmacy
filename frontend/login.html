@@ -6,28 +6,85 @@
     <title>HealthTrack Systems - Iniciar Sesion</title>
     <link rel="stylesheet" href="css/styles.css">
     <style>
+        /* Login-only polish */
         .login-page {
-            background: linear-gradient(135deg, rgba(44, 95, 141, 0.9), rgba(23, 162, 184, 0.9)),
-                        url('https://images.unsplash.com/photo-1576091160399-112ba8d25d1d?w=1920') center/cover;
-            background-attachment: fixed;
+            position: relative;
+            overflow: hidden;
+        }
+        .login-page::before,
+        .login-page::after {
+            content: '';
+            position: absolute;
+            border-radius: 999px;
+            filter: blur(40px);
+            opacity: 0.25;
+            pointer-events: none;
+        }
+        .login-page::before {
+            width: 260px; height: 260px;
+            background: #4caf50;
+            top: -40px; left: -60px;
+        }
+        .login-page::after {
+            width: 320px; height: 320px;
+            background: #2196f3;
+            bottom: -90px; right: -40px;
         }
         
         .login-logo {
             text-align: center;
-            margin-bottom: 30px;
+            margin-bottom: 22px;
         }
         
         .login-logo img {
-            max-width: 280px;
+            max-width: 300px;
             height: auto;
-            margin-bottom: 10px;
+            margin-bottom: 6px;
         }
         
         .login-tagline {
-            color: #2C5F8D;
-            font-size: 14px;
-            font-style: italic;
-            margin-top: 10px;
+            color: #1a3a5c;
+            font-size: 13px;
+            font-weight: 600;
+            letter-spacing: 0.4px;
+            margin-top: 8px;
+        }
+
+        /* Login card theming */
+        .login-card {
+            background: #ffffff;
+            color: #1a3a5c;
+        }
+
+        .login-card p,
+        .login-card label {
+            color: #1a3a5c;
+        }
+
+        .login-card .btn-primary {
+            background: #2c5f8d;
+            border-color: #2c5f8d;
+            color: #fff;
+        }
+
+        .login-card .btn-primary:hover {
+            background: #1f4a73;
+            border-color: #1f4a73;
+        }
+
+        .test-credentials {
+            background: #eef4ff !important;
+            border: 1px solid #d0ddff !important;
+            color: #1a3a5c !important;
+        }
+
+        .test-credentials code {
+            background: #1a3a5c !important;
+            color: #fff !important;
+        }
+
+        .d-none {
+            display: none !important;
         }
     </style>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
@@ -70,9 +127,9 @@
                     Iniciar Sesion
                 </button>
                 
-                <div id="errorMsg" class="error-msg" class="d-none"></div>
+                <div id="errorMsg" class="error-msg d-none"></div>
                 
-                <div id="loadingSpinner" class="spinner" class="d-none"></div>
+                <div id="loadingSpinner" class="spinner d-none"></div>
             </form>
             
             <div class="test-credentials">

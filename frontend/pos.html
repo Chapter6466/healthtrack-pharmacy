@@ -182,10 +182,23 @@
         <div class="modal-content">
             <div class="modal-header">
                 <h3>Procesar Pago</h3>
-                <button class="btn btn-sm btn-danger" id="cancelPaymentBtn">&#9642;</button>
+                <button class="btn btn-sm btn-danger" id="cancelPaymentBtn" aria-label="Cerrar pago">&#9642;</button>
             </div>
 
             <div class="modal-body">
+                <div id="posPatientSummary" class="card" style="background:#eef5fb; color:#1a3a5c; padding:12px; margin-bottom:12px; display:none;">
+                    <div style="font-weight:600;">Paciente</div>
+                    <div id="posPatientDetails" style="font-size:13px;"></div>
+                </div>
+
+                <div class="card" style="background:#f5f7fa; color:#1a3a5c; padding:12px; margin-bottom:12px;">
+                    <div style="display:flex; flex-direction:column; gap:6px;">
+                        <div><strong>Subtotal:</strong> <span id="orderSubtotal">-</span></div>
+                        <div><strong>Impuesto:</strong> <span id="orderTax">-</span></div>
+                        <div><strong>Total:</strong> <span id="orderTotal">-</span></div>
+                    </div>
+                </div>
+
                 <div class="form-group">
                     <label>Metodo de Pago</label>
                     <select id="paymentMethod" class="form-control">
@@ -197,18 +210,19 @@
                 </div>
 
                 <!-- CASH -->
-                <div id="cashSection" class="d-none">
+                <div id="cashSection">
                     <div class="form-group">
                         <label>Monto Recibido</label>
                         <input type="number" id="cashAmount" class="form-control" step="0.01" min="0">
                     </div>
                     <div class="form-group">
-                        <label>Cambio</label>
-                        <input type="text" id="changeDue" class="form-control" disabled value="&#9642;                    </div>
+                        <label style="color:#1a3a5c;">Cambio</label>
+                        <div id="changeDue" class="form-control" style="background:#f8f9fa; color:#1a3a5c;">-</div>
+                    </div>
                 </div>
 
                 <!-- CARD / TRANSFER -->
-                <div id="referenceSection" class="d-none">
+                <div id="referenceSection">
                     <div class="form-group">
                         <label>Numero de Referencia / Autorizacion *</label>
                         <input type="text"
@@ -219,7 +233,7 @@
                 </div>
 
                 <!-- INSURANCE -->
-                <div id="insuranceSection" class="d-none">
+                <div id="insuranceSection">
                     <div class="form-group">
                         <label>Referencia de Seguro</label>
                         <input type="text"

@@ -119,7 +119,7 @@ router.post('/invoice', requireAuth, async (req, res) => {
     // Persist items as JSON for the SP
     const itemsJson = JSON.stringify(items);
 
-    console.log('🧾 Creating invoice:', {
+    console.log('Creating invoice:', {
       patientId: patientId || 'walk-in',
       warehouseId: finalWarehouseId,
       userId,
@@ -137,9 +137,11 @@ router.post('/invoice', requireAuth, async (req, res) => {
       PaymentMethod: method,
 
       Subtotal: nSubtotal,
-      Total: nTax,          // ⚠️ MATCH TABLE COLUMN
-      DiscountTotal: 0,        // ⚠️ MATCH TABLE COLUMN
-      GrandTotal: nTotal,      // ✅ THIS FIXES THE ERROR
+      Tax: nTax,
+      TaxTotal: nTax,
+      Total: nTotal,
+      DiscountTotal: 0,
+      GrandTotal: nTotal,
 
       // Payment details
       PaymentReference:
@@ -154,14 +156,14 @@ router.post('/invoice', requireAuth, async (req, res) => {
           : null,
 
       InsuranceReference:
-        method === 'INSURANCE' ? insuranceRef : null,
+        method === 'INSURANCE' ? insRef : null,
 
       Items: itemsJson
     });
 
     if (result[0] && result[0].length > 0) {
       const invoiceData = result[0][0];
-      console.log('✅ Invoice created:', invoiceData.InvoiceID);
+      console.log('Invoice created:', invoiceData.InvoiceID);
 
       return res.json({
         success: true,
@@ -173,7 +175,7 @@ router.post('/invoice', requireAuth, async (req, res) => {
 
     throw new Error('No invoice data returned');
   } catch (error) {
-    console.error('❌ Invoice creation error:', error);
+    console.error('Invoice creation error:', error);
     res.status(500).json({
       success: false,
       message: 'Error: ' + (error.message || 'Unknown error')

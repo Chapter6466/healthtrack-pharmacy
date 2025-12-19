@@ -552,9 +552,28 @@
       return;
     }
 
-    const { total } = getCartTotals();
+    const { subtotal, tax, total } = getCartTotals();
 
+    document.getElementById('orderSubtotal') && (document.getElementById('orderSubtotal').textContent = fmtCurrency(subtotal));
+    document.getElementById('orderTax') && (document.getElementById('orderTax').textContent = fmtCurrency(tax));
     document.getElementById('orderTotal') && (document.getElementById('orderTotal').textContent = fmtCurrency(total));
+
+    // Patient summary
+    const patientSummary = document.getElementById('posPatientSummary');
+    const patientDetails = document.getElementById('posPatientDetails');
+    if (patientSummary && patientDetails) {
+      if (selectedPatient) {
+        patientSummary.style.display = 'block';
+        patientDetails.innerHTML = `
+          <div><strong>${escapeHtml(selectedPatient.FullName || selectedPatient.fullName || 'Paciente')}</strong></div>
+          <div>${escapeHtml(selectedPatient.DocumentID || selectedPatient.Document || 'N/A')}</div>
+          <div>${escapeHtml(selectedPatient.Phone || selectedPatient.PhoneNumber || '')}</div>
+        `;
+      } else {
+        patientSummary.style.display = 'none';
+        patientDetails.innerHTML = '';
+      }
+    }
 
     // Reset fields
     const methodEl = document.getElementById('paymentMethod');
@@ -569,7 +588,8 @@
     const insRefEl = document.getElementById('insuranceReference');
     if (insRefEl) insRefEl.value = '';
 
-    document.getElementById('changeDue') && (document.getElementById('changeDue').textContent = fmtCurrency(0));
+    const changeEl = document.getElementById('changeDue');
+    if (changeEl) changeEl.textContent = fmtCurrency(0);
 
     const modal = document.getElementById('paymentModal');
     if (modal) modal.style.display = 'flex';
@@ -588,14 +608,19 @@
       const cash = document.getElementById('cashSection');
       const ref = document.getElementById('referenceSection');
       const ins = document.getElementById('insuranceSection');
+      const changeEl = document.getElementById('changeDue');
 
       if (!method) return;
 
       cash.style.display = 'none';
       ref.style.display = 'none';
       ins.style.display = 'none';
+      if (changeEl) changeEl.textContent = '-';
 
-      if (method === 'CASH') cash.style.display = 'block';
+      if (method === 'CASH') {
+        cash.style.display = 'block';
+        if (changeEl) changeEl.textContent = fmtCurrency(0);
+      }
       if (method === 'CARD' || method === 'TRANSFER') ref.style.display = 'block';
       if (method === 'INSURANCE') ins.style.display = 'block';
   }
@@ -653,12 +678,13 @@
       changeDue = Math.max(0, cashReceived - total);
     }
 
-    if (paymentMethod === 'CARD' || paymentMethod === 'TRANSFER') {
-        const ref = document.getElementById('paymentReference').value.trim();
-        if (!ref) {
-            showToast('Debe ingresar el n de referencia', 'warning');
-            return;
-        }
+    if (method === 'CARD' || method === 'TRANSFER') {
+      const ref = document.getElementById('paymentReference')?.value.trim();
+      if (!ref) {
+        showToast('Debe ingresar el n de referencia', 'warning');
+        return;
+      }
+      paymentReference = ref;
     }
 
     if (method === 'INSURANCE') {
